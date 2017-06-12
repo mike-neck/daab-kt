@@ -27,4 +27,18 @@ project(':plugin') {
         testCompile group: 'org.jetbrains.spek',    name: 'spek-api',                   version: '1.1.2'
         testRuntime group: 'org.jetbrains.spek',    name: 'spek-junit-platform-engine', version: '1.1.2'
     }
+
+    task versionProperties {
+        description = 'generates kotlin version file'
+        def targetFile = file("$projectDir/src/main/resources/kotlinVersion.properties")
+        outputs.file targetFile
+        doLast {
+            def contents = """# auto generated file by $name
+kotlinVersion=$kotlinVersion
+"""
+            targetFile.write(contents, 'UTF-8')
+        }
+    }
+
+    task initProject(dependsOn: 'versionProperties', description: 'initialize project')
 }

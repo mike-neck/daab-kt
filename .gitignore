@@ -22,7 +22,6 @@
 
 ### macOS template
 *.DS_Store
-.AppleDouble
-.LSOverride
-Icon
-._*
+
+### Project Specific file
+kotlinVersion.properties
