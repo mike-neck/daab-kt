@@ -15,12 +15,7 @@
  */
 package com.lisb.daab
 
-import com.lisb.daab.GradleFunUtil.create
-import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.tasks.Exec
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-import org.jetbrains.kotlin.utils.addToStdlib.cast
+import java.util.*
 
 data class Daab(
         var executable: String = "/usr/local/bin/daab",
@@ -33,35 +28,34 @@ data class Daab(
 
     fun mainPackage(packageName: String): Unit = Unit.apply { this@Daab.mainPackage = packageName }
 
-    fun daabApp(appDir: String): Unit = Unit.apply { this@Daab.daabAppDir = appDir }
-    
-}
+    fun daabAppDir(appDir: String): Unit = Unit.apply { this@Daab.daabAppDir = appDir }
 
-object DaabConfigure {
+    fun appName(name: String): Unit = Unit.apply { this@Daab.appName = name }
 
-    val group: String = "daab"
+    companion object: TaskNamer {
 
-    val definedTask: TaskNamer = object: TaskNamer {
+        val group: String = "daab"
+
         override val daabInit: String = "daabInit"
         override val daabRun: String = "daabRun"
         override val daabStart: String = "daabStart"
-    }
+        override val generateAppJs: String = "generateAppJs"
 
-    fun configureModel(project: Project): Daab = project.extensions.create<Daab>("daab")
+        val kotlin2Js: String = "kotlin2js"
+        val jetbrainsKotlin = "org.jetbrains.kotlin"
+        val kotlinStdLibJs = "kotlin-stdlib-js"
 
-    fun configureDaabInit(project: Project, daab: Daab): Task = project.tasks.create<Exec>(definedTask.daabInit) {
-        it.description = "init daab project directory"
-        it.executable = daab.executable
-        it.workingDir(daab.daabAppDir)
-    }
-
-    fun configureKotlinCompileOption(project: Project): Unit = project.afterEvaluate {
-        val daab = it.extensions.getByName("daab").cast<Daab>()
-        val options = it.extensions.getByName("compileKotlin2Js").cast<Kotlin2JsCompile>().kotlinOptions
-        options.outputFile = "${project.projectDir}/${daab.daabAppDir}/${daab.appName}.js"
-        options.moduleKind = "commonjs"
-        options.sourceMap = true
+        lateinit var kotlinVersion: String
         
+        init {
+            this::class.java.classLoader.getResourceAsStream("kotlinVersion.properties").use { 
+                val properties = Properties()
+                properties.load(it)
+                this.kotlinVersion =
+                        properties.getProperty("kotlinVersion")?:
+                                throw IllegalStateException("no kotlin version found.")
+            }
+        }
     }
 }
 
@@ -69,7 +63,6 @@ interface TaskNamer {
     val daabInit: String
     val daabRun: String
     val daabStart: String
+
+    val generateAppJs: String
 }
-
-
-
