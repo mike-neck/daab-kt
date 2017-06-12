@@ -1,0 +1,48 @@
+= daab-kt
+
+This is daab extension for Kotlin. With this plugin you can write daab application with Kotlin.
+
+== Getting Started
+
+Add following snippet to your build file(`build.gradle`).
+
+[build.gradle, groovy]
+----
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.lisb.daab:daab-kt:0.1.6'
+  }
+}
+----
+
+== Tasks
+
+This plugin offers following tasks.
+
+=== `daabInit`
+
+`daabInit` initializes an application with command `daab init`.
+
+=== `daabRun`
+
+`daabRun` converts Kotlin file into JavaScript and then runs the application.
+
+=== `daabStart`
+
+`daabStart` converts Kotlin file into JavaScript and then starts the application in background.
+
+== Configuration
+
+To customize this plugin, edit these items.
+
+.configurable items
+[options="header"]
+|================================
+|Property|Value|Default|Nullable
+|`executable`|Path to `daab` command|`/usr/local/bin/daab`|No
+|`mainPackage`|Package of the application|`""`(empty string)|No
+|`daabAppDir`|The application directory relative to the project|`daab`|No
+|================================
