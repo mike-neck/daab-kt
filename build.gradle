@@ -3,14 +3,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "$jetbrainsKotlin:$kotlinGradlePlugin:$kotlinVersion"
-        classpath group: 'org.junit.platform', name: 'junit-platform-gradle-plugin', version: '1.0.0-M4'
+        classpath group: jetbrainsKotlin,       name: kotlinGradlePlugin,               version: kotlinVersion
+        classpath group: 'org.junit.platform',  name: 'junit-platform-gradle-plugin',   version: '1.0.0-M4'
     }
 }
 
 version=daabPluginVersion
 group=lisbCorp
-
 
 project(':plugin') {
     apply plugin: kotlin
@@ -21,6 +20,7 @@ project(':plugin') {
     }
 
     dependencies {
+        compile     group: jetbrainsKotlin,         name: kotlinGradlePlugin,           version: kotlinVersion
         compile     group: jetbrainsKotlin,         name: 'kotlin-stdlib',              version: kotlinVersion
         compile     gradleApi()
         testCompile gradleTestKit()
@@ -28,4 +28,3 @@ project(':plugin') {
         testRuntime group: 'org.jetbrains.spek',    name: 'spek-junit-platform-engine', version: '1.1.2'
     }
 }
-
