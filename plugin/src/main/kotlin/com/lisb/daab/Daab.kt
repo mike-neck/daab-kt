@@ -39,7 +39,10 @@ data class Daab(
         override val daabInit: String = "daabInit"
         override val daabRun: String = "daabRun"
         override val daabStart: String = "daabStart"
+
+        override val foreverIgnore: String = "foreverIgnore"
         override val generateAppJs: String = "generateAppJs"
+        override val npmKotlinVersion: String = "npmKotlinVersion"
 
         val kotlin2Js: String = "kotlin2js"
         val jetbrainsKotlin = "org.jetbrains.kotlin"
@@ -64,5 +67,7 @@ interface TaskNamer {
     val daabRun: String
     val daabStart: String
 
+    val foreverIgnore: String
     val generateAppJs: String
+    val npmKotlinVersion: String
 }

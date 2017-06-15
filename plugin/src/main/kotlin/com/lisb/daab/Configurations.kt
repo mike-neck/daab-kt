@@ -42,6 +42,8 @@ object Configurations {
                     "version" to Daab.kotlinVersion
             )).let { Unit }
 
+    fun configureForeverIgnoreTask(project: Project): Task = project.tasks.create<ForeverIgnoreTask>(Daab.foreverIgnore)
+
     fun configureKotlinCompileOption(project: Project): Unit = project.afterEvaluate {
         val daab = it.extensions.getByName("daab").cast<Daab>()
         val options = it.extensions.getByName("compileKotlin2Js").cast<Kotlin2JsCompile>().kotlinOptions
@@ -50,20 +52,18 @@ object Configurations {
         options.sourceMap = true
     }
 
-    fun configureDaabInit(project: Project, daab: Daab): Task = project.tasks.create<Exec>(Daab.daabInit) {
+    fun configureNpmKotlinVersionTask(project: Project, daab: Daab): Task =
+            project.tasks.create<NpmKotlinVersion>(Daab.npmKotlinVersion)
+                    .apply { project.afterEvaluate { this.lazyConfigure(daab) } }
+
+    fun configureDaabInitTask(project: Project, daab: Daab): Task = project.tasks.create<Exec>(Daab.daabInit) {
         it.description = "init daab project directory"
         it.group = Daab.group
+        it.dependsOn(Daab.npmKotlinVersion)
         it.executable = daab.executable
         it.workingDir(daab.daabAppDir)
     }
 
-    fun configureGenerateAppJs(project: Project, daab: Daab): Task = project.tasks.create(Daab.generateAppJs) {
-        it.description = "generates application body."
-        it.group = Daab.group
-        val appDir = project.file("${project.projectDir}/${daab.daabAppDir}")
-        val jsFile = appDir.resolve(daab.appName)
-        it.outputs.file(jsFile)
-
-    }
+    fun configureGenerateAppJsTask(project: Project, daab: Daab): Task =
+            project.tasks.create<GenerateAppJsTask>(Daab.generateAppJs) { it.daab = daab }
 }
-

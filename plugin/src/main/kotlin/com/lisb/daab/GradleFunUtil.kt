@@ -29,4 +29,7 @@ object GradleFunUtil {
             name: String,
             kc: KClass<A> = A::class,
             crossinline f: (A) -> Unit): A = this.create(name, kc.java) { f(it) }
+
+    inline fun <reified A: Task> TaskContainer.create(name: String, kc: KClass<A> = A::class): A =
+            this.create(name, kc.java)
 }
