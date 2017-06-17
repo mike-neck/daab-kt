@@ -16,13 +16,10 @@
 package com.lisb.daab
 
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Exec
-import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.OutputFile
-import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.File
 import com.lisb.daab.GradleFunUtil.invoke
+import org.gradle.api.tasks.*
 import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 abstract class ForeverIgnoreTask: DefaultTask() {
@@ -55,14 +52,9 @@ module.exports = daab.${daab.mainPackage}.${daab.appName};
 """.let { jsFile.writeText(it) }
 }
 
-abstract class NpmKotlinVersion: Exec() {
+abstract class NpmKotlinVersion: AbstractExecTask<NpmKotlinVersion>(NpmKotlinVersion::class.java) {
 
     val outputStream: ByteArrayOutputStream = ByteArrayOutputStream(65536)
-
-    fun lazyConfigure(daab: Daab): Unit =
-            Unit.apply { this@NpmKotlinVersion.executable = daab.executable.replace("daab", "npm") }
-                    .apply { this@NpmKotlinVersion.args("view", "kotlin") }
-                    .apply { this@NpmKotlinVersion.standardOutput = outputStream }
 
     fun getOutputAsString(): String = if (this.state.skipped) throw IllegalStateException("the task did nothing.")
             else outputStream.toString("UTF-8").lineSequence()
@@ -73,15 +65,15 @@ abstract class NpmKotlinVersion: Exec() {
             ?.trim() ?: "1.1.0"
 }
 
-abstract class writePackageJson: DefaultTask() {
+abstract class WritePackageJson: DefaultTask() {
 
     lateinit var daab: Daab
 
     @get:OutputFile
-    val newPackageJson: File get() = project.file("${project.projectDir}/${daab.daabAppDir}/new-package.json")
+    val newPackageJson: File get() = project.file(daab.newPackageJson(project))
 
     @get:InputFile
-    val packageJson: File get() = project.file("${project.projectDir}/${daab.daabAppDir}/package.json")
+    val packageJson: File get() = project.file(daab.packageJson(project))
 
     val npmKotlinVersionTask: NpmKotlinVersion
         get() = project.tasks.getByName(Daab.npmKotlinVersion).cast<NpmKotlinVersion>()

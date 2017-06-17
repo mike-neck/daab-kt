@@ -15,6 +15,7 @@
  */
 package com.lisb.daab
 
+import org.gradle.api.Project
 import java.util.*
 
 data class Daab(
@@ -32,6 +33,10 @@ data class Daab(
 
     fun appName(name: String): Unit = Unit.apply { this@Daab.appName = name }
 
+    fun newPackageJson(project: Project): String = "${project.projectDir}/${daabAppDir}/new-package.json"
+
+    fun packageJson(project: Project): String = "${project.projectDir}/${daabAppDir}/package.json"
+
     companion object: TaskNamer {
 
         val group: String = "daab"
@@ -43,10 +48,15 @@ data class Daab(
         override val foreverIgnore: String = "foreverIgnore"
         override val generateAppJs: String = "generateAppJs"
         override val npmKotlinVersion: String = "npmKotlinVersion"
+        override val writePackageJson: String = "writePackageJson"
+        override val replacePackageJson: String = "replacePackageJson"
+        override val packageJson: String = "packageJson"
 
         val kotlin2Js: String = "kotlin2js"
         val jetbrainsKotlin = "org.jetbrains.kotlin"
         val kotlinStdLibJs = "kotlin-stdlib-js"
+
+        val compileKotlin2Js: String = "compileKotlin2Js"
 
         lateinit var kotlinVersion: String
         
@@ -70,4 +80,7 @@ interface TaskNamer {
     val foreverIgnore: String
     val generateAppJs: String
     val npmKotlinVersion: String
+    val writePackageJson: String
+    val replacePackageJson: String
+    val packageJson: String
 }

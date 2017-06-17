@@ -25,11 +25,11 @@ import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 object Configurations {
 
-    fun configureModel(project: Project): Daab = project.extensions.create<Daab>("daab")
-
     fun applyPlugin(project: Project): Unit =
             if (project.pluginManager.hasPlugin(Daab.kotlin2Js)) Unit
             else project.pluginManager.apply(Daab.kotlin2Js)
+
+    fun configureModel(project: Project): Daab = project.extensions.create<Daab>("daab")
 
     fun applyRepositories(project: Project): Unit =
             project.repositories.add(project.repositories.mavenCentral()).let{ Unit }
@@ -42,27 +42,51 @@ object Configurations {
                     "version" to Daab.kotlinVersion
             )).let { Unit }
 
-    fun configureForeverIgnoreTask(project: Project): Task = project.tasks.create<ForeverIgnoreTask>(Daab.foreverIgnore)
-
     fun configureKotlinCompileOption(project: Project): Unit = project.afterEvaluate {
         val daab = it.extensions.getByName("daab").cast<Daab>()
-        val options = it.extensions.getByName("compileKotlin2Js").cast<Kotlin2JsCompile>().kotlinOptions
+        val options = it.extensions.getByName(Daab.compileKotlin2Js).cast<Kotlin2JsCompile>().kotlinOptions
         options.outputFile = "${project.projectDir}/${daab.daabAppDir}/lib/${daab.appName}.js"
         options.moduleKind = "commonjs"
         options.sourceMap = true
     }
 
-    fun configureNpmKotlinVersionTask(project: Project, daab: Daab): Task =
-            project.tasks.create<NpmKotlinVersion>(Daab.npmKotlinVersion)
-                    .apply { project.afterEvaluate { this.lazyConfigure(daab) } }
-
     fun configureDaabInitTask(project: Project, daab: Daab): Task = project.tasks.create<Exec>(Daab.daabInit)
             .also { it.description = "init daab project directory" }
             .also { it.group = Daab.group }
-            .also { it.dependsOn(Daab.npmKotlinVersion) }
             .also { it.executable = daab.executable }
             .also { it.workingDir(daab.daabAppDir) }
+            .also { it.finalizedBy(Daab.packageJson) }
+
+    fun configureNpmKotlinVersionTask(project: Project, daab: Daab): Task =
+            project.tasks.create<NpmKotlinVersion>(Daab.npmKotlinVersion)
+                    .also { it.executable = daab.executable.replace("daab", "npm") }
+                    .also { it.args("view", "kotlin") }
+                    .also { it.standardOutput = it.outputStream }
+                    .also { it.dependsOn(Daab.daabInit) }
+
+    fun configureWritePackageJsonTask(project: Project, daab: Daab): Task =
+            project.tasks.create<WritePackageJson>(Daab.writePackageJson)
+                    .also { it.daab = daab }
+                    .also { it.dependsOn(Daab.npmKotlinVersion) }
+
+    fun configureReplacePackageJsonTask(project: Project, daab: Daab): Task =
+            project.tasks.create(Daab.replacePackageJson).doLast {
+                project.file(daab.packageJson(project)).delete()
+            }.doLast {
+                project.file(daab.newPackageJson(project))
+                        .renameTo(project.file(daab.packageJson(project)))
+            }.also { it.dependsOn(Daab.writePackageJson) }
+
+    fun configurePackageJsonTask(project: Project): Task =
+            project.tasks.create(Daab.packageJson).dependsOn(Daab.replacePackageJson)
 
     fun configureGenerateAppJsTask(project: Project, daab: Daab): Task =
             project.tasks.create<GenerateAppJsTask>(Daab.generateAppJs) { it.daab = daab }
+
+    fun configureForeverIgnoreTask(project: Project, daab: Daab): Task =
+            project.tasks.create<ForeverIgnoreTask>(Daab.foreverIgnore)
+                    .also { it.daab = daab }
+
+    fun configureCompileKotlin2JsTask(project: Project): Task =
+            project.tasks.getByName(Daab.compileKotlin2Js).finalizedBy(Daab.foreverIgnore, Daab.generateAppJs)
 }
