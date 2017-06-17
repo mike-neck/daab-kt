@@ -25,3 +25,7 @@
 
 ### Project Specific file
 kotlinVersion.properties
+
+### for local development
+install-local.gradle
+local-dev/

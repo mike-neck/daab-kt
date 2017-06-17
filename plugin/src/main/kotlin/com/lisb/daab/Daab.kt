@@ -18,7 +18,7 @@ package com.lisb.daab
 import org.gradle.api.Project
 import java.util.*
 
-data class Daab(
+open class Daab(
         var executable: String = "/usr/local/bin/daab",
         var mainPackage: String =  "",
         var daabAppDir: String = "daab",

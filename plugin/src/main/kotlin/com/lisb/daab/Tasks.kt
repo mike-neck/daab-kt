@@ -24,41 +24,41 @@ import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-abstract class ForeverIgnoreTask: DefaultTask() {
+open class ForeverIgnoreTask: DefaultTask() {
 
     lateinit var daab: Daab
 
-    val targetDir: File get() = project.file("${project.projectDir}/${daab.daabAppDir}/scripts")
+    open val targetDir: File get() = project.file("${project.projectDir}/${daab.daabAppDir}/scripts")
 
     @get:OutputFile
-    val ignoreFile: File get() = targetDir.resolve(".foreverignore")
+    open val ignoreFile: File get() = targetDir.resolve(".foreverignore")
 
     @TaskAction
-    fun writeIgnoreFile(): Unit = ignoreFile.writeText("")
+    open fun writeIgnoreFile(): Unit = ignoreFile.writeText("")
 }
 
-abstract class GenerateAppJsTask: DefaultTask() {
+open class GenerateAppJsTask: DefaultTask() {
 
     lateinit var daab: Daab
 
-    val appDir: File get() = project.file("${project.projectDir}/${daab.daabAppDir}/scripts")
+    open val appDir: File get() = project.file("${project.projectDir}/${daab.daabAppDir}/scripts")
 
     @get:OutputFile
-    val jsFile: File get() = appDir.resolve("app.js")
+    open val jsFile: File get() = appDir.resolve("app.js")
 
     @TaskAction
-    fun writeJsFile(): Unit = """
+    open fun writeJsFile(): Unit = """
 const daab = require("./lib/${daab.appName}");
 
 module.exports = daab.${daab.mainPackage}.${daab.appName};
 """.let { jsFile.writeText(it) }
 }
 
-abstract class NpmKotlinVersion: AbstractExecTask<NpmKotlinVersion>(NpmKotlinVersion::class.java) {
+open class NpmKotlinVersion: AbstractExecTask<NpmKotlinVersion>(NpmKotlinVersion::class.java) {
 
-    val outputStream: ByteArrayOutputStream = ByteArrayOutputStream(65536)
+    open val outputStream: ByteArrayOutputStream = ByteArrayOutputStream(65536)
 
-    fun getOutputAsString(): String = if (this.state.skipped) throw IllegalStateException("the task did nothing.")
+    open fun getOutputAsString(): String = if (this.state.skipped) throw IllegalStateException("the task did nothing.")
             else outputStream.toString("UTF-8").lineSequence()
             .find { it.contains("latest:") }
             ?.substringAfter("latest:")
@@ -67,24 +67,24 @@ abstract class NpmKotlinVersion: AbstractExecTask<NpmKotlinVersion>(NpmKotlinVer
             ?.trim() ?: "1.1.0"
 }
 
-abstract class WritePackageJson: DefaultTask() {
+open class WritePackageJson: DefaultTask() {
 
     lateinit var daab: Daab
 
     @get:OutputFile
-    val newPackageJson: File get() = project.file(daab.newPackageJson(project))
+    open val newPackageJson: File get() = project.file(daab.newPackageJson(project))
 
     @get:InputFile
-    val packageJson: File get() = project.file(daab.packageJson(project))
+    open val packageJson: File get() = project.file(daab.packageJson(project))
 
-    val npmKotlinVersionTask: NpmKotlinVersion
+    open val npmKotlinVersionTask: NpmKotlinVersion
         get() = project.tasks.getByName(Daab.npmKotlinVersion).let {
             it as? NpmKotlinVersion ?:
                     throw IllegalStateException(
                             "npmKotlinVersion task is defined as [${NpmKotlinVersion::class.qualifiedName}]")
         }
 
-    fun appendNextLine(current: String): String =
+    open fun appendNextLine(current: String): String =
             if (current.contains("\"dependencies\": {"))
                 """
     "kotlin": "^${npmKotlinVersionTask.getOutputAsString()},"
@@ -93,7 +93,7 @@ abstract class WritePackageJson: DefaultTask() {
                 "\n"
 
     @TaskAction
-    fun appendJsonFile(): Unit = StringBuilder()
+    open fun appendJsonFile(): Unit = StringBuilder()
             .also { sb: StringBuilder -> packageJson.forEachLine { sb(it)(appendNextLine(it)) } }
             .let { sb: StringBuilder -> newPackageJson.writeText("$sb") }
 }
