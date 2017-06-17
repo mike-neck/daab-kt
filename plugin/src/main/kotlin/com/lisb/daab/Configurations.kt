@@ -19,8 +19,8 @@ import com.lisb.daab.GradleFunUtil.create
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.Exec
+import org.gradle.api.tasks.TaskValidationException
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 
 object Configurations {
@@ -50,11 +50,17 @@ object Configurations {
             )).let { Unit }
 
     fun configureKotlinCompileOption(project: Project, daab: Daab): Unit = project.afterEvaluate {
-        val options = it.extensions.getByName(Daab.compileKotlin2Js).cast<Kotlin2JsCompile>().kotlinOptions
+        val options = it.extensions.getByName(Daab.compileKotlin2Js).k2Js().kotlinOptions
         options.outputFile = "${project.projectDir}/${daab.daabAppDir}/lib/${daab.appName}.js"
         options.moduleKind = "commonjs"
         options.sourceMap = true
     }
+
+    private fun <T: Any> T.k2Js(): Kotlin2JsCompile =
+            if (this is Kotlin2JsCompile) this 
+            else throw TaskValidationException(
+                    "Expected task compileKotlin2Js is [${Kotlin2JsCompile::class.qualifiedName}] type but " +
+                            "it is [${this::class.qualifiedName}].", mutableListOf())
 
     fun configureDaabInitTask(project: Project, daab: Daab): Task = project.tasks.create<Exec>(Daab.daabInit)
             .also { it.description = "init daab project directory" }

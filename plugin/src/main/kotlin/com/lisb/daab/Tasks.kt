@@ -15,12 +15,14 @@
  */
 package com.lisb.daab
 
+import com.lisb.daab.GradleFunUtil.invoke
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.AbstractExecTask
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.File
-import com.lisb.daab.GradleFunUtil.invoke
-import org.gradle.api.tasks.*
-import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 abstract class ForeverIgnoreTask: DefaultTask() {
 
@@ -76,7 +78,11 @@ abstract class WritePackageJson: DefaultTask() {
     val packageJson: File get() = project.file(daab.packageJson(project))
 
     val npmKotlinVersionTask: NpmKotlinVersion
-        get() = project.tasks.getByName(Daab.npmKotlinVersion).cast<NpmKotlinVersion>()
+        get() = project.tasks.getByName(Daab.npmKotlinVersion).let {
+            it as? NpmKotlinVersion ?:
+                    throw IllegalStateException(
+                            "npmKotlinVersion task is defined as [${NpmKotlinVersion::class.qualifiedName}]")
+        }
 
     fun appendNextLine(current: String): String =
             if (current.contains("\"dependencies\": {"))
