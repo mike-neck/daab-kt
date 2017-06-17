@@ -32,4 +32,6 @@ object GradleFunUtil {
 
     inline fun <reified A: Task> TaskContainer.create(name: String, kc: KClass<A> = A::class): A =
             this.create(name, kc.java)
+
+    operator fun StringBuilder.invoke(s: String): StringBuilder = this.append(s)
 }

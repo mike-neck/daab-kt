@@ -17,10 +17,13 @@ package com.lisb.daab
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Exec
+import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.File
+import com.lisb.daab.GradleFunUtil.invoke
+import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 abstract class ForeverIgnoreTask: DefaultTask() {
 
@@ -68,4 +71,31 @@ abstract class NpmKotlinVersion: Exec() {
             ?.replace("},", "")
             ?.replace("'", "")
             ?.trim() ?: "1.1.0"
+}
+
+abstract class writePackageJson: DefaultTask() {
+
+    lateinit var daab: Daab
+
+    @get:OutputFile
+    val newPackageJson: File get() = project.file("${project.projectDir}/${daab.daabAppDir}/new-package.json")
+
+    @get:InputFile
+    val packageJson: File get() = project.file("${project.projectDir}/${daab.daabAppDir}/package.json")
+
+    val npmKotlinVersionTask: NpmKotlinVersion
+        get() = project.tasks.getByName(Daab.npmKotlinVersion).cast<NpmKotlinVersion>()
+
+    fun appendNextLine(current: String): String =
+            if (current.contains("\"dependencies\": {"))
+                """
+    "kotlin": "^${npmKotlinVersionTask.getOutputAsString()},"
+"""
+            else
+                "\n"
+
+    @TaskAction
+    fun appendJsonFile(): Unit = StringBuilder()
+            .also { sb: StringBuilder -> packageJson.forEachLine { sb(it)(appendNextLine(it)) } }
+            .let { sb: StringBuilder -> newPackageJson.writeText("$sb") }
 }
