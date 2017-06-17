@@ -56,13 +56,12 @@ object Configurations {
             project.tasks.create<NpmKotlinVersion>(Daab.npmKotlinVersion)
                     .apply { project.afterEvaluate { this.lazyConfigure(daab) } }
 
-    fun configureDaabInitTask(project: Project, daab: Daab): Task = project.tasks.create<Exec>(Daab.daabInit) {
-        it.description = "init daab project directory"
-        it.group = Daab.group
-        it.dependsOn(Daab.npmKotlinVersion)
-        it.executable = daab.executable
-        it.workingDir(daab.daabAppDir)
-    }
+    fun configureDaabInitTask(project: Project, daab: Daab): Task = project.tasks.create<Exec>(Daab.daabInit)
+            .also { it.description = "init daab project directory" }
+            .also { it.group = Daab.group }
+            .also { it.dependsOn(Daab.npmKotlinVersion) }
+            .also { it.executable = daab.executable }
+            .also { it.workingDir(daab.daabAppDir) }
 
     fun configureGenerateAppJsTask(project: Project, daab: Daab): Task =
             project.tasks.create<GenerateAppJsTask>(Daab.generateAppJs) { it.daab = daab }
