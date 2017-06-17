@@ -49,6 +49,7 @@ open class Daab(
         override val daabRun: String = "daabRun"
         override val daabStart: String = "daabStart"
 
+        override val prepareDaabDirectory: String = "prepareDaabDirectory"
         override val foreverIgnore: String = "foreverIgnore"
         override val generateAppJs: String = "generateAppJs"
         override val npmKotlinVersion: String = "npmKotlinVersion"
@@ -81,6 +82,7 @@ interface TaskNamer {
     val daabRun: String
     val daabStart: String
 
+    val prepareDaabDirectory: String
     val foreverIgnore: String
     val generateAppJs: String
     val npmKotlinVersion: String

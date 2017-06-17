@@ -87,7 +87,7 @@ open class WritePackageJson: DefaultTask() {
     open fun appendNextLine(current: String): String =
             if (current.contains("\"dependencies\": {"))
                 """
-    "kotlin": "^${npmKotlinVersionTask.getOutputAsString()},"
+    "kotlin": "^${npmKotlinVersionTask.getOutputAsString()}",
 """
             else
                 "\n"

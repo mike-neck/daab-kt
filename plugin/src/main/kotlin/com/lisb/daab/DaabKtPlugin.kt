@@ -30,6 +30,7 @@ class DaabKtPlugin: Plugin<Project>, Function1<Project, Unit> {
                     (Configurations::applyRepositories).tuple +
                     (Configurations::addDependency).tuple +
                     (Configurations::configureKotlinCompileOption).tuple +
+                    (Configurations::configurePrepareDaabDirectory).tuple +
                     (Configurations::configureDaabInitTask).tuple +
                     (Configurations::configureNpmKotlinVersionTask).tuple +
                     (Configurations::configureWritePackageJsonTask).tuple +

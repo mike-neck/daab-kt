@@ -18,6 +18,7 @@ package com.lisb.daab
 import org.gradle.api.Task
 import org.gradle.api.plugins.ExtensionContainer
 import org.gradle.api.tasks.TaskContainer
+import java.io.File
 import kotlin.reflect.KClass
 
 object GradleFunUtil {
@@ -32,6 +33,8 @@ object GradleFunUtil {
 
     inline fun <reified A: Task> TaskContainer.create(name: String, kc: KClass<A> = A::class): A =
             this.create(name, kc.java)
+
+    fun createDirIfNotExists(dir: File): Boolean = if (dir.exists()) false else dir.mkdirs()
 
     operator fun StringBuilder.invoke(s: String): StringBuilder = this.append(s)
 }

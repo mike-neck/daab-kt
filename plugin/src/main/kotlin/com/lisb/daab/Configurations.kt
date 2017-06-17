@@ -16,11 +16,13 @@
 package com.lisb.daab
 
 import com.lisb.daab.GradleFunUtil.create
+import com.lisb.daab.GradleFunUtil.createDirIfNotExists
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.TaskValidationException
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
+import java.io.File
 
 
 object Configurations {
@@ -62,17 +64,30 @@ object Configurations {
                     "Expected task compileKotlin2Js is [${Kotlin2JsCompile::class.qualifiedName}] type but " +
                             "it is [${this::class.qualifiedName}].", mutableListOf())
 
+    fun configurePrepareDaabDirectory(project: Project, daab: Daab): Task =
+            project.tasks.create(Daab.prepareDaabDirectory).doLast { 
+                createDirIfNotExists(project.file(daab.daabAppDir))
+            }.also { 
+                it.outputs.upToDateWhen { project.file(daab.daabAppDir).exists() }
+            }
+
     fun configureDaabInitTask(project: Project, daab: Daab): Task = project.tasks.create<Exec>(Daab.daabInit)
             .also { it.description = "init daab project directory" }
             .also { it.group = Daab.group }
+            .also { it.dependsOn(Daab.prepareDaabDirectory) }
             .also { it.executable = daab.executable }
+            .also { it.args("init") }
+            .also { it.environment("PATH", appendPath(project.file(daab.executable))) }
             .also { it.workingDir(daab.daabAppDir) }
             .also { it.finalizedBy(Daab.packageJson) }
+
+    fun appendPath(exec: File): String = "${System.getenv("PATH")}:${exec.absoluteFile.parent}"
 
     fun configureNpmKotlinVersionTask(project: Project, daab: Daab): Task =
             project.tasks.create<NpmKotlinVersion>(Daab.npmKotlinVersion)
                     .also { it.executable = daab.executable.replace("daab", "npm") }
                     .also { it.args("view", "kotlin") }
+                    .also { it.environment("PATH", appendPath(project.file(daab.executable))) }
                     .also { it.standardOutput = it.outputStream }
                     .also { it.dependsOn(Daab.daabInit) }
 
