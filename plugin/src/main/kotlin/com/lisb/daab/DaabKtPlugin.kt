@@ -15,6 +15,9 @@
  */
 package com.lisb.daab
 
+import com.lisb.daab.Configurations.minus
+import com.lisb.daab.Configurations.plus
+import com.lisb.daab.Configurations.tuple
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -22,5 +25,18 @@ class DaabKtPlugin: Plugin<Project>, Function1<Project, Unit> {
 
     override fun apply(project: Project?) = if (project == null) Unit else this(project)
 
-    override fun invoke(project: Project) = TODO("not implemented")
+    override fun invoke(project: Project): Unit =
+            (Configurations.applyPlugin(project) to Configurations.configureModel(project)) +
+                    (Configurations::applyRepositories).tuple +
+                    (Configurations::addDependency).tuple +
+                    (Configurations::configureKotlinCompileOption).tuple +
+                    (Configurations::configureDaabInitTask).tuple +
+                    (Configurations::configureNpmKotlinVersionTask).tuple +
+                    (Configurations::configureWritePackageJsonTask).tuple +
+                    (Configurations::configureReplacePackageJsonTask).tuple +
+                    (Configurations::configurePackageJsonTask).tuple +
+                    (Configurations::configureGenerateAppJsTask).tuple +
+                    (Configurations::configureForeverIgnoreTask).tuple +
+                    (Configurations::configureCompileKotlin2JsTask).tuple -
+                    Unit
 }

@@ -25,12 +25,16 @@ data class Daab(
         var appName: String = "app"
 ) {
 
+    @Suppress("unused")
     fun executable(path: String): Unit = Unit.apply { this@Daab.executable = path }
 
+    @Suppress("unused")
     fun mainPackage(packageName: String): Unit = Unit.apply { this@Daab.mainPackage = packageName }
 
+    @Suppress("unused")
     fun daabAppDir(appDir: String): Unit = Unit.apply { this@Daab.daabAppDir = appDir }
 
+    @Suppress("unused")
     fun appName(name: String): Unit = Unit.apply { this@Daab.appName = name }
 
     fun newPackageJson(project: Project): String = "${project.projectDir}/${daabAppDir}/new-package.json"

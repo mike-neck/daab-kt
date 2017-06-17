@@ -25,16 +25,23 @@ import org.jetbrains.kotlin.utils.addToStdlib.cast
 
 object Configurations {
 
-    fun applyPlugin(project: Project): Unit =
-            if (project.pluginManager.hasPlugin(Daab.kotlin2Js)) Unit
-            else project.pluginManager.apply(Daab.kotlin2Js)
+    operator inline fun <T> T.plus(op: (T) -> Any): T = this.also { op(it) }
+
+    @Suppress("unused")
+    operator fun <A: Any> A.minus(unit: Unit): Unit = unit
+
+    val <A, B, C> ((A,B) -> C).tuple: (Pair<A,B>) -> C get() = { p -> this(p.first, p.second) }
+
+    fun applyPlugin(project: Project): Project =
+            if (project.pluginManager.hasPlugin(Daab.kotlin2Js)) project
+            else project.also { it.pluginManager.apply(Daab.kotlin2Js) }
 
     fun configureModel(project: Project): Daab = project.extensions.create<Daab>("daab")
 
-    fun applyRepositories(project: Project): Unit =
+    fun applyRepositories(project: Project, @Suppress("UNUSED_PARAMETER") daab: Daab): Unit =
             project.repositories.add(project.repositories.mavenCentral()).let{ Unit }
 
-    fun addDependency(project: Project): Unit =
+    fun addDependency(project: Project, @Suppress("UNUSED_PARAMETER") daab: Daab): Unit =
             project.dependencies.add(
                     "compile", mapOf(
                     "group" to Daab.jetbrainsKotlin,
@@ -42,8 +49,7 @@ object Configurations {
                     "version" to Daab.kotlinVersion
             )).let { Unit }
 
-    fun configureKotlinCompileOption(project: Project): Unit = project.afterEvaluate {
-        val daab = it.extensions.getByName("daab").cast<Daab>()
+    fun configureKotlinCompileOption(project: Project, daab: Daab): Unit = project.afterEvaluate {
         val options = it.extensions.getByName(Daab.compileKotlin2Js).cast<Kotlin2JsCompile>().kotlinOptions
         options.outputFile = "${project.projectDir}/${daab.daabAppDir}/lib/${daab.appName}.js"
         options.moduleKind = "commonjs"
@@ -77,7 +83,7 @@ object Configurations {
                         .renameTo(project.file(daab.packageJson(project)))
             }.also { it.dependsOn(Daab.writePackageJson) }
 
-    fun configurePackageJsonTask(project: Project): Task =
+    fun configurePackageJsonTask(project: Project, @Suppress("UNUSED_PARAMETER") daab: Daab): Task =
             project.tasks.create(Daab.packageJson).dependsOn(Daab.replacePackageJson)
 
     fun configureGenerateAppJsTask(project: Project, daab: Daab): Task =
@@ -87,6 +93,6 @@ object Configurations {
             project.tasks.create<ForeverIgnoreTask>(Daab.foreverIgnore)
                     .also { it.daab = daab }
 
-    fun configureCompileKotlin2JsTask(project: Project): Task =
+    fun configureCompileKotlin2JsTask(project: Project, @Suppress("UNUSED_PARAMETER") daab: Daab): Task =
             project.tasks.getByName(Daab.compileKotlin2Js).finalizedBy(Daab.foreverIgnore, Daab.generateAppJs)
 }
