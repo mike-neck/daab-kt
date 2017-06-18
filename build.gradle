@@ -1,3 +1,5 @@
+import java.util.zip.ZipFile
+
 buildscript {
     repositories {
         mavenCentral()
@@ -72,4 +74,43 @@ kotlinVersion=$kotlinVersion
     }
 
     task initProject(dependsOn: 'versionProperties', description: 'initialize project')
+}
+
+project(':types') {
+    apply plugin: 'kotlin2js'
+    if (localDevelopment) {
+        apply from: rootProject.file('install-local.gradle')
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile     group: jetbrainsKotlin,     name: 'kotlin-stdlib-js',               version: kotlinVersion
+    }
+
+    compileKotlin2Js {
+        kotlinOptions.outputFile = "${projectDir}/build/js/daab-kt.js"
+        kotlinOptions.sourceMap = true
+    }
+
+    tasks.withType(Jar) {
+        it.baseName = 'daab'
+        it.appendix = 'kt'
+    } 
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from tasks.javadoc
+    }
+
+    artifacts {
+        archives tasks.sourcesJar, tasks.javadocJar
+    }
 }

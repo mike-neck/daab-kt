@@ -1,0 +1,118 @@
+/*
+ * Copyright 2017 Shinya Mochida
+ * 
+ * Licensed under the Apache License,Version2.0(the"License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,software
+ * Distributed under the License is distributed on an"AS IS"BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+@file:JsQualifier("com.lisb.daab")
+
+package com.lisb.daab
+
+external interface User {
+    val id: String
+    val status: String
+    val displayName: String
+    val phoneticDisplayName: String
+    val canonicalPhoneticDisplayName: String
+    val profileImageUrl: String
+    val updatedAt: LongValue
+    val domainId: LongValue
+    @JsName("id_i64")
+    val idI64: LongValue
+    val profileContact: Array<ProfileItem>
+    val email: String
+    val name: String
+    @JsName("profile_url")
+    val profileUrl: String
+    val room: String
+    val rooms: Map<String, Room>
+}
+
+external class LongValue {
+    val high: Int
+    val low: Int
+}
+
+external interface ProfileItem {
+    val profileItemId: Int
+    val value: String
+    val canonicalValue: String
+}
+
+external interface Room {
+    val id: String
+    val domainId: String
+    val type: Int
+    val name: String?
+    val iconUrl: String?
+    val userIds: Array<LongValue>
+    val guestIds: Array<LongValue>?
+    val updatedAt: LongValue
+    val leftUsers: Any?
+    @JsName("id_i64")
+    val idI64: LongValue
+    val topic: String?
+    val users: Array<User>
+    val domain: Domain
+}
+
+external interface Domain {
+    val id: String
+    val updatedAt: LongValue
+    val domainInfo: DomainInfo
+    val contract: Contract
+    val profileDefinition: ProfileDefinition
+    val setting: Setting
+    val role: Role
+    val closed: Boolean
+    @JsName("id_i64")
+    val idI64: LongValue
+}
+
+external interface DomainInfo {
+    val name: String
+    val logoUrl: String?
+    val frozen: Any?
+}
+
+external interface Contract {
+    val id: LongValue
+    val quota: LongValue
+    val plan: LongValue
+    val solutionIds: Any?
+}
+
+external interface ProfileDefinition {
+    val domainId: LongValue
+    val itemDefinitions: Array<Any>
+}
+
+external interface Setting {
+    val allowAttachmentType: Any
+    val allowSaveAttachmentsToDevice: Boolean
+}
+
+external interface Role {
+    val type: LongValue
+    val allowGuests: Boolean
+    val allowCreateAttachments: Boolean
+    val allowReadAttachments: Boolean
+    val allowCreateAnnouncement: Boolean
+    val allowReadAnnouncements: Boolean
+    val allowListUsers: Boolean
+}
+
+external interface Envelope {
+    val room: String
+    val user: User
+    val message: Message
+}
