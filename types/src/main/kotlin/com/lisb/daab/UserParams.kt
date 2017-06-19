@@ -17,27 +17,54 @@ package com.lisb.daab
 
 data class ListenerOption(val id: String)
 
-data class SendingMessage(val text: String)
+class SendingMessage(
+        val text: String,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
 
-data class MessageDestination(val room: String)
+class MessageDestination(
+        val room: String,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?)
 
-data class Stamp(
+class Stamp(
         @JsName("stamp_set") val stampSet: String,
         @JsName("stamp_index") val stampIndex: String,
-        val text: String?)
+        val text: String?,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?)
 
-data class Question(val question: String)
+class Question(
+        val question: String,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?)
 
-data class CloseQuestion(@JsName("close_yesno") val closeYesNo: LongValue)
+class CloseQuestion(
+        @JsName("close_yesno") val closeYesNo: LongValue,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
 
-data class SelectStamp(val question: String, val options: List<String>)
+class SelectStamp(
+        val question: String, val options: List<String>,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?)
 
-data class CloseSelect(@JsName("close_select") val closeSelect: LongValue)
+class CloseSelect(
+        @JsName("close_select") val closeSelect: LongValue,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
 
-data class TaskStamp(val title: String, @JsName("closing_type") val closingType: Int)
+class TaskStamp(
+        val title: String, @JsName("closing_type") val closingType: Int,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
 
-data class CloseTask(@JsName("close_task") val closeTask: LongValue)
+class CloseTask(
+        @JsName("close_task") val closeTask: LongValue,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?)
 
-data class SendFile(val path: String, val name: String?, val type: String?, val text: String?)
+class SendFile(
+        val path: String,
+        val name: String?,
+        val type: String?,
+        val text: String?,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
 
-data class SendFiles(val path: List<String>, val name: List<String>?, val type: List<String>?, val text: List<String>?)
+class SendFiles(
+        val path: List<String>,
+        val name: List<String>?,
+        val type: List<String>?,
+        val text: List<String>?,
+        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
