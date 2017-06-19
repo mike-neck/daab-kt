@@ -40,19 +40,19 @@ external interface Response {
     fun send(vararg messages: SendingMessage): Unit
     fun send(destination: MessageDestination, vararg messages: SendingMessage): Unit
 
-    fun send(stamp: Stamp): Unit
+    fun send(stamp: StampWithHandler): Unit
 
-    fun send(question: Question): Unit
-    fun send(closeQuestion: CloseQuestion): Unit
+    fun send(question: QuestionWithHandler): Unit
+    fun send(closeQuestion: CloseQuestionWithHandler): Unit
 
-    fun send(selectStamp: SelectStamp): Unit
-    fun send(closeSelect: CloseSelect): Unit
+    fun send(selectStamp: SelectStampWithHandler): Unit
+    fun send(closeSelect: CloseSelectWithHandler): Unit
 
-    fun send(taskStamp: TaskStamp): Unit
-    fun send(closeTask: CloseTask): Unit
+    fun send(taskStamp: TaskStampWithHandler): Unit
+    fun send(closeTask: CloseTaskWithHandler): Unit
 
-    fun send(sendFile: SendFile): Unit
-    fun send(sendFiles: SendFiles): Unit
+    fun send(sendFile: SendFileWithHandler): Unit
+    fun send(sendFiles: SendFilesWithHandler): Unit
 }
 
 external interface MessageProperty {

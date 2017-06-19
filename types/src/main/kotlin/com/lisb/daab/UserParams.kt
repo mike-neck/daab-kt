@@ -17,54 +17,100 @@ package com.lisb.daab
 
 data class ListenerOption(val id: String)
 
-class SendingMessage(
-        val text: String,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
+class MessageDestination(val room: String)
 
-class MessageDestination(
-        val room: String,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?)
+interface WithHandler<E> {
+    @JsName("onsend") val onSend: (E) -> Unit
+    @JsName("onread") val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+}
 
-class Stamp(
+open class SendingMessage(val text: String) 
+
+class SendingMessageWithHandler(
+        text: String,
+        override val onSend: (SendingMessage) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): SendingMessage(text), WithHandler<SendingMessage>
+
+
+
+open class Stamp(
         @JsName("stamp_set") val stampSet: String,
         @JsName("stamp_index") val stampIndex: String,
-        val text: String?,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?)
+        val text: String?)
 
-class Question(
-        val question: String,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?)
+class StampWithHandler(
+        stampSet: String,
+        stampIndex: String,
+        text: String?,
+        override val onSend: (Stamp) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): Stamp(stampSet, stampIndex, text), WithHandler<Stamp>
 
-class CloseQuestion(
-        @JsName("close_yesno") val closeYesNo: LongValue,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
 
-class SelectStamp(
-        val question: String, val options: List<String>,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?)
 
-class CloseSelect(
-        @JsName("close_select") val closeSelect: LongValue,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
+open class Question(val question: String, val listing: Boolean?)
 
-class TaskStamp(
-        val title: String, @JsName("closing_type") val closingType: Int,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
+class QuestionWithHandler(
+        question: String,
+        listing: Boolean?,
+        override val onSend: (Question) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): Question(question, listing), WithHandler<Question>
 
-class CloseTask(
-        @JsName("close_task") val closeTask: LongValue,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?)
+open class CloseQuestion(@JsName("close_yesno") val closeYesNo: LongValue) 
 
-class SendFile(
+
+
+open class SelectStamp(val question: String, val options: Array<String>)
+
+class SelectStampWithHandler(
+        question: String,
+        options: Array<String>,
+        override val onSend: (SelectStamp) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): SelectStamp(question, options), WithHandler<SelectStamp>
+
+open class CloseSelect(@JsName("close_select") val closeSelect: LongValue) 
+
+
+open class TaskStamp(val title: String, @JsName("closing_type") val closingType: Int) 
+
+class TaskStampWithHandler(
+        title: String,
+        closingType: Int,
+        override val onSend: (TaskStamp) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): TaskStamp(title, closingType), WithHandler<TaskStamp>
+
+open class CloseTask(@JsName("close_task") val closeTask: LongValue)
+
+open class SendFile(
         val path: String,
         val name: String?,
         val type: String?,
-        val text: String?,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
+        val text: String?) 
 
-class SendFiles(
-        val path: List<String>,
-        val name: List<String>?,
-        val type: List<String>?,
-        val text: List<String>?,
-        @JsName("onsend") val onSend: ((Any) -> Unit)?) 
+class SendFileWithHandler(
+        path: String,
+        name: String?,
+        type: String?,
+        text: String?,
+        override val onSend: (SendFile) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): SendFile(path, name, type, text), WithHandler<SendFile>
+
+open class SendFiles(
+        val path: Array<String>,
+        val name: Array<String>?,
+        val type: Array<String>?,
+        val text: String?) 
+
+class SendFilesWithHandler(
+        path: Array<String>,
+        name: Array<String>?,
+        type: Array<String>?,
+        text: String?,
+        override val onSend: (SendFiles) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): SendFiles(path, name, type, text), WithHandler<SendFiles>
