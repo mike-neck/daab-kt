@@ -21,6 +21,7 @@ external interface User {
     val id: String
     val status: String
     val displayName: String
+    val canonicalDisplayName: String
     val phoneticDisplayName: String
     val canonicalPhoneticDisplayName: String
     val profileImageUrl: String
@@ -33,6 +34,9 @@ external interface User {
     val name: String
     @JsName("profile_url")
     val profileUrl: String
+}
+
+external interface UserDetail: User {
     val room: String
     val rooms: Map<String, Room>
 }
@@ -113,6 +117,41 @@ external interface Role {
 
 external interface Envelope {
     val room: String
-    val user: User
+    val user: UserDetail
     val message: Message
+}
+
+external interface Talk {
+    val id: LongValue
+    val domainId: LongValue
+    val type: TalkType
+    val name: String?
+    val iconUrl: String?
+    val userIds: Array<LongValue>
+    val guestIds: Array<LongValue>?
+    val updatedAt: LongValue
+    val leftUsers: Array<LongValue>?
+}
+
+external interface TalkType {
+    operator fun get(i: Int): Any
+}
+
+external interface MessageDetail<E> {
+    val type: Int
+    val content: E
+    val createdAt: LongValue
+    val id: String
+    @JsName("id_i64") val idI64: LongValue
+    val userId: String
+    val talk: TalkDetail
+    val talkId: String
+}
+
+external interface TalkDetail: Talk {
+    @JsName("id_i64") val idI64: LongValue
+    val topic: String?
+    val users: Array<User>
+    val domain: Domain
+    @JsName("domainId_i64") val domainIdI64: LongValue
 }

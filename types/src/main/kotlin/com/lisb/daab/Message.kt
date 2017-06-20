@@ -41,11 +41,3 @@ external class EnterMessage: Message
 external class LeaveMessage: Message
 external class TopicMessage: TextMessage
 external class CatchAllMessage: Message
-
-external interface MessageSent {
-    val context: MessageSentContext
-}
-
-external interface MessageSentContext {
-    
-}

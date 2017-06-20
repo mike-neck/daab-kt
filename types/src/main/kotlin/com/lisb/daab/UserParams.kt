@@ -19,16 +19,22 @@ data class ListenerOption(val id: String)
 
 class MessageDestination(val room: String)
 
-interface WithHandler<E> {
-    @JsName("onsend") val onSend: (E) -> Unit
+interface WithHandler<in E> {
+    @JsName("onsend") val onSend: (MessageSent<E>) -> Unit
     @JsName("onread") val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 }
+
+interface MessageSent<out E> {
+    val context: E
+    val listeners: dynamic
+    val talk: Talk
+} 
 
 open class SendingMessage(val text: String) 
 
 class SendingMessageWithHandler(
         text: String,
-        override val onSend: (SendingMessage) -> Unit,
+        override val onSend: (MessageSent<SendingMessage>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): SendingMessage(text), WithHandler<SendingMessage>
 
@@ -43,7 +49,7 @@ class StampWithHandler(
         stampSet: String,
         stampIndex: String,
         text: String?,
-        override val onSend: (Stamp) -> Unit,
+        override val onSend: (MessageSent<Stamp>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): Stamp(stampSet, stampIndex, text), WithHandler<Stamp>
 
@@ -54,7 +60,7 @@ open class Question(val question: String, val listing: Boolean?)
 class QuestionWithHandler(
         question: String,
         listing: Boolean?,
-        override val onSend: (Question) -> Unit,
+        override val onSend: (MessageSent<Question>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): Question(question, listing), WithHandler<Question>
 
@@ -67,7 +73,7 @@ open class SelectStamp(val question: String, val options: Array<String>)
 class SelectStampWithHandler(
         question: String,
         options: Array<String>,
-        override val onSend: (SelectStamp) -> Unit,
+        override val onSend: (MessageSent<SelectStamp>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): SelectStamp(question, options), WithHandler<SelectStamp>
 
@@ -79,7 +85,7 @@ open class TaskStamp(val title: String, @JsName("closing_type") val closingType:
 class TaskStampWithHandler(
         title: String,
         closingType: Int,
-        override val onSend: (TaskStamp) -> Unit,
+        override val onSend: (MessageSent<TaskStamp>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): TaskStamp(title, closingType), WithHandler<TaskStamp>
 
@@ -96,7 +102,7 @@ class SendFileWithHandler(
         name: String?,
         type: String?,
         text: String?,
-        override val onSend: (SendFile) -> Unit,
+        override val onSend: (MessageSent<SendFile>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): SendFile(path, name, type, text), WithHandler<SendFile>
 
@@ -111,6 +117,6 @@ class SendFilesWithHandler(
         name: Array<String>?,
         type: Array<String>?,
         text: String?,
-        override val onSend: (SendFiles) -> Unit,
+        override val onSend: (MessageSent<SendFiles>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): SendFiles(path, name, type, text), WithHandler<SendFiles>
