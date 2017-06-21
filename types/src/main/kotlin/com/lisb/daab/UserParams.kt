@@ -41,13 +41,13 @@ class SendingMessageWithHandler(
 
 
 open class Stamp(
-        @JsName("stamp_set") val stampSet: String,
-        @JsName("stamp_index") val stampIndex: String,
+        @JsName("stamp_set") val stampSet: Int,
+        @JsName("stamp_index") val stampIndex: LongValue,
         val text: String?)
 
 class StampWithHandler(
-        stampSet: String,
-        stampIndex: String,
+        stampSet: Int,
+        stampIndex: LongValue,
         text: String?,
         override val onSend: (MessageSent<Stamp>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
@@ -68,14 +68,15 @@ open class CloseQuestion(@JsName("close_yesno") val closeYesNo: LongValue)
 
 
 
-open class SelectStamp(val question: String, val options: Array<String>)
+open class SelectStamp(val question: String, val options: Array<String>, val listing: Boolean?)
 
 class SelectStampWithHandler(
         question: String,
         options: Array<String>,
+        listing: Boolean?,
         override val onSend: (MessageSent<SelectStamp>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
-): SelectStamp(question, options), WithHandler<SelectStamp>
+): SelectStamp(question, options, listing), WithHandler<SelectStamp>
 
 open class CloseSelect(@JsName("close_select") val closeSelect: LongValue) 
 

@@ -137,12 +137,13 @@ external interface TalkType {
     operator fun get(i: Int): Any
 }
 
-external interface MessageDetail<E> {
+external interface MessageDetail<out E> {
     val type: Int
     val content: E
     val createdAt: LongValue
     val id: String
     @JsName("id_i64") val idI64: LongValue
+    val user: User
     val userId: String
     val talk: TalkDetail
     val talkId: String
@@ -155,3 +156,9 @@ external interface TalkDetail: Talk {
     val domain: Domain
     @JsName("domainId_i64") val domainIdI64: LongValue
 }
+
+// message -> message
+// stamp -> another stamp type
+// question -> question
+// select_stamp -> select_stamp
+// task_stamp -> task_stamp
