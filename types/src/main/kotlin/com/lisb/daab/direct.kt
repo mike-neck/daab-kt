@@ -162,3 +162,17 @@ external interface TalkDetail: Talk {
 // question -> question
 // select_stamp -> select_stamp
 // task_stamp -> task_stamp
+
+// close question -> another close question type
+external interface CloseQuestionResult {
+    @JsName("in_reply_to") val inReplyTo: LongValue
+    val responses: Array<QuestionResult>
+    @JsName("last_response") val lastResponse: Int
+    val question: String
+    val listing: Boolean
+}
+
+external interface QuestionResult {
+    val content: String
+    val count: Int?
+}
