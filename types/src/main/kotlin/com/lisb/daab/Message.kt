@@ -19,6 +19,13 @@ package com.lisb.daab
 
 import kotlin.js.RegExpMatch
 
+
+external interface MessageProperty {
+    val user: User
+    val done: Boolean
+    val room: String
+}
+
 external open class Message(user: User, done: Boolean): MessageProperty {
     override val user: User = definedExternally
     override val done: Boolean = definedExternally

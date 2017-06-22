@@ -17,6 +17,7 @@
 
 package com.lisb.daab
 
+import com.lisb.daab.message.*
 import kotlin.js.*
 
 external interface Robot {
@@ -53,10 +54,4 @@ external interface Response {
 
     fun send(sendFile: SendFileWithHandler): Unit
     fun send(sendFiles: SendFilesWithHandler): Unit
-}
-
-external interface MessageProperty {
-    val user: User
-    val done: Boolean
-    val room: String
 }
