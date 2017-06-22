@@ -40,7 +40,6 @@ class SendingMessageWithHandler(
 ): SendingMessage(text), WithHandler<SendingMessage, SendingMessage>
 
 
-// TODO now type is not defined.
 open class Stamp(
         @JsName("stamp_set") val stampSet: Int,
         @JsName("stamp_index") val stampIndex: LongValue,
@@ -50,9 +49,9 @@ class StampWithHandler(
         stampSet: Int,
         stampIndex: LongValue,
         text: String?,
-        override val onSend: (MessageSent<Stamp>) -> Unit,
+        override val onSend: (MessageSent<Stamp, Stamp>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
-): Stamp(stampSet, stampIndex, text), WithHandler<Stamp>
+): Stamp(stampSet, stampIndex, text), WithHandler<Stamp, Stamp>
 
 
 
