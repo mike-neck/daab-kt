@@ -31,6 +31,8 @@ interface MessageSent<out E, out D> {
     val message: MessageDetail<D>
 } 
 
+// message
+
 open class SendingMessage(val text: String) 
 
 class SendingMessageWithHandler(
@@ -39,6 +41,7 @@ class SendingMessageWithHandler(
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): SendingMessage(text), WithHandler<SendingMessage, SendingMessage>
 
+// stamp
 
 open class Stamp(
         @JsName("stamp_set") val stampSet: Int,
@@ -53,7 +56,7 @@ class StampWithHandler(
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): Stamp(stampSet, stampIndex, text), WithHandler<Stamp, Stamp>
 
-
+// question
 
 open class Question(val question: String, val listing: Boolean?)
 
@@ -72,7 +75,7 @@ class CloseQuestionWithHandler(
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): CloseQuestion(closeYesNo), WithHandler<CloseQuestion, CloseQuestionResult>
 
-
+// select stamp
 
 open class SelectStamp(val question: String, val options: Array<String>, val listing: Boolean?)
 
@@ -86,6 +89,7 @@ class SelectStampWithHandler(
 
 open class CloseSelect(@JsName("close_select") val closeSelect: LongValue) 
 
+// task stamp
 
 open class TaskStamp(val title: String, @JsName("closing_type") val closingType: Int) 
 
@@ -97,6 +101,8 @@ class TaskStampWithHandler(
 ): TaskStamp(title, closingType), WithHandler<TaskStamp, TaskStamp>
 
 open class CloseTask(@JsName("close_task") val closeTask: LongValue)
+
+// file
 
 open class SendFile(
         val path: String,
@@ -113,6 +119,8 @@ class SendFileWithHandler(
         override val onSend: (MessageSent<SendFile>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): SendFile(path, name, type, text), WithHandler<SendFile>
+
+// files
 
 open class SendFiles(
         val path: Array<String>,
