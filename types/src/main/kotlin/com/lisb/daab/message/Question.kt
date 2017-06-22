@@ -14,6 +14,7 @@ class QuestionWithHandler(
 ): Question(question, listing), WithHandler<Question, Question>
 
 open class CloseQuestion(@JsName("close_yesno") val closeYesNo: String)
+
 class CloseQuestionWithHandler(
         closeYesNo: String,
         override val onSend: (MessageSent<CloseQuestion, CloseQuestionResult>) -> Unit,

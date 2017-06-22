@@ -1,11 +1,9 @@
 package com.lisb.daab.message
 
-import com.lisb.daab.LongValue
-import com.lisb.daab.MessageSent
-import com.lisb.daab.User
-import com.lisb.daab.WithHandler
+import com.lisb.daab.*
 
 open class SelectStamp(val question: String, val options: Array<String>, val listing: Boolean?)
+
 class SelectStampWithHandler(
         question: String,
         options: Array<String>,
@@ -14,4 +12,10 @@ class SelectStampWithHandler(
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
 ): SelectStamp(question, options, listing), WithHandler<SelectStamp, SelectStamp>
 
-open class CloseSelect(@JsName("close_select") val closeSelect: LongValue)
+open class CloseSelect(@JsName("close_select") val closeSelect: String)
+
+class CloseSelectWithHandler(
+        closeSelect: String,
+        override val onSend: (MessageSent<CloseSelect, CloseQuestionResult>) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): CloseSelect(closeSelect), WithHandler<CloseSelect, CloseQuestionResult>
