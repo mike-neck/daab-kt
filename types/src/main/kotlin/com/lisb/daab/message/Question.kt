@@ -1,9 +1,6 @@
 package com.lisb.daab.message
 
-import com.lisb.daab.CloseQuestionResult
-import com.lisb.daab.MessageSent
-import com.lisb.daab.User
-import com.lisb.daab.WithHandler
+import com.lisb.daab.*
 
 open class Question(val question: String, val listing: Boolean?)
 class QuestionWithHandler(
@@ -15,8 +12,12 @@ class QuestionWithHandler(
 
 open class CloseQuestion(@JsName("close_yesno") val closeYesNo: String)
 
+abstract class CloseQuestionWithInReplyTo(closeYesNo: String): CloseQuestion(closeYesNo) {
+    @JsName("in_reply_to") abstract val inReplyTo: LongValue
+}
+
 class CloseQuestionWithHandler(
         closeYesNo: String,
-        override val onSend: (MessageSent<CloseQuestion, CloseQuestionResult>) -> Unit,
+        override val onSend: (MessageSent<CloseQuestionWithInReplyTo, CloseQuestionResult>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
-): CloseQuestion(closeYesNo), WithHandler<CloseQuestion, CloseQuestionResult>
+): CloseQuestion(closeYesNo), WithHandler<CloseQuestionWithInReplyTo, CloseQuestionResult>

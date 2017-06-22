@@ -14,8 +14,12 @@ class SelectStampWithHandler(
 
 open class CloseSelect(@JsName("close_select") val closeSelect: String)
 
+abstract class CloseSelectWithInReplyTo(closeSelect: String): CloseSelect(closeSelect) {
+    @JsName("in_reply_to") abstract val inReplyTo: LongValue
+}
+
 class CloseSelectWithHandler(
         closeSelect: String,
-        override val onSend: (MessageSent<CloseSelect, CloseQuestionResult>) -> Unit,
+        override val onSend: (MessageSent<CloseSelectWithInReplyTo, CloseQuestionResult>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
-): CloseSelect(closeSelect), WithHandler<CloseSelect, CloseQuestionResult>
+): CloseSelect(closeSelect), WithHandler<CloseSelectWithInReplyTo, CloseQuestionResult>

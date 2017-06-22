@@ -167,7 +167,7 @@ external interface TalkDetail: Talk {
 external interface CloseQuestionResult {
     @JsName("in_reply_to") val inReplyTo: LongValue
     val responses: Array<QuestionResult>
-    @JsName("last_response") val lastResponse: Int
+    @JsName("last_response") val lastResponse: Int?
     val question: String
     val listing: Boolean
 }
@@ -175,4 +175,12 @@ external interface CloseQuestionResult {
 external interface QuestionResult {
     val content: String
     val count: Int?
+}
+
+external interface CloseTaskResult {
+    @JsName("in_reply_to") val inReplyTo: LongValue
+    val responses: Array<QuestionResult>
+    @JsName("last_response") val lastResponse: Int?
+    val title: String
+    @JsName("closing_type") val closingType: Int
 }
