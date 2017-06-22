@@ -91,7 +91,7 @@ project(':types') {
     }
 
     compileKotlin2Js {
-        kotlinOptions.outputFile = "${projectDir}/build/js/daab-kt.js"
+        kotlinOptions.outputFile = "build/js/daab-kt.js"
         kotlinOptions.sourceMap = true
     }
 
