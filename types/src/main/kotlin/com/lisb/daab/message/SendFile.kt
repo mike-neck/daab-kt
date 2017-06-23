@@ -1,5 +1,6 @@
 package com.lisb.daab.message
 
+import com.lisb.daab.LongValue
 import com.lisb.daab.MessageSent
 import com.lisb.daab.User
 import com.lisb.daab.WithHandler
@@ -8,17 +9,24 @@ open class SendFile(
         val path: String,
         val name: String?,
         val type: String?,
-        val text: String?)
+        val contentSize: Int?)
 
-// TODO it's inspecting now
 class SendFileWithHandler(
         path: String,
         name: String?,
         type: String?,
-        text: String?,
-        override val onSend: (MessageSent<SendFile>) -> Unit,
+        contentSize: Int?,
+        override val onSend: (MessageSent<SendFile, SendFileContent>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
-): SendFile(path, name, type, text), WithHandler<SendFile>
+): SendFile(path, name, type, contentSize), WithHandler<SendFile, SendFileContent>
+
+interface SendFileContent {
+    @JsName("file_id") val fileId: LongValue
+    val url: String
+    val name: String?
+    @JsName("content_type") val type: String?
+    @JsName("content_size") val size: Int
+}
 
 open class SendFiles(
         val path: Array<String>,
