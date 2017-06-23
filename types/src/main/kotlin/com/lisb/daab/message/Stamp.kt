@@ -7,13 +7,18 @@ import com.lisb.daab.WithHandler
 
 open class Stamp(
         @JsName("stamp_set") val stampSet: Int,
-        @JsName("stamp_index") val stampIndex: LongValue,
-        val text: String?)
+        @JsName("stamp_index") val stampIndex: String,
+        val text: String? = null)
 
 class StampWithHandler(
         stampSet: Int,
-        stampIndex: LongValue,
-        text: String?,
-        override val onSend: ((MessageSent<Stamp, Stamp>) -> Unit)?,
-        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
-): Stamp(stampSet, stampIndex, text), WithHandler<Stamp, Stamp>
+        stampIndex: String,
+        text: String? = null,
+        override val onSend: ((MessageSent<StampContent, StampContent>) -> Unit)? = null,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
+): Stamp(stampSet, stampIndex, text), WithHandler<StampContent, StampContent>
+
+interface StampContent {
+    @JsName("stamp_set") val stampSet: Int
+    @JsName("stamp_index") val stampIndex: LongValue
+}

@@ -7,15 +7,15 @@ import com.lisb.daab.WithHandler
 
 open class SendFile(
         val path: String,
-        val name: String?,
-        val type: String?)
+        val name: String? = null,
+        val type: String? = null)
 
 class SendFileWithHandler(
         path: String,
-        name: String?,
-        type: String?,
-        override val onSend: ((MessageSent<SendFile, SendFileContent>) -> Unit)?,
-        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
+        name: String? = null,
+        type: String? = null,
+        override val onSend: ((MessageSent<SendFile, SendFileContent>) -> Unit)? = null,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
 ): SendFile(path, name, type), WithHandler<SendFile, SendFileContent>
 
 interface SendFileContent {
@@ -28,17 +28,17 @@ interface SendFileContent {
 
 open class SendFiles(
         val path: Array<String>,
-        val name: Array<String>?,
-        val type: Array<String>?,
-        val text: String?)
+        val name: Array<String>? = null,
+        val type: Array<String>? = null,
+        val text: String? = null)
 
 class SendFilesWithHandler(
         path: Array<String>,
-        name: Array<String>?,
-        type: Array<String>?,
-        text: String?,
-        override val onSend: ((MessageSent<SendFiles, SendFilesContent>) -> Unit)?,
-        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
+        name: Array<String>? = null,
+        type: Array<String>? = null,
+        text: String? = null,
+        override val onSend: ((MessageSent<SendFiles, SendFilesContent>) -> Unit)? = null,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
 ): SendFiles(path, name, type, text), WithHandler<SendFiles, SendFilesContent>
 
 interface SendFilesContent {
@@ -49,14 +49,14 @@ interface SendFilesContent {
 open class SendFileWithMessage(
         val path: String,
         val text: String,
-        val name: String?,
-        val type: String?)
+        val name: String? = null,
+        val type: String? = null)
 
 class SendFileWithMessageAndHandler(
         path: String,
         text: String,
-        type: String?,
-        name: String?,
-        override val onSend: ((MessageSent<SendFileWithMessage, SendFilesContent>) -> Unit)?,
-        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
+        type: String? = null,
+        name: String? = null,
+        override val onSend: ((MessageSent<SendFileWithMessage, SendFilesContent>) -> Unit)? = null,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
 ): SendFileWithMessage(path, text, name, type), WithHandler<SendFileWithMessage, SendFilesContent>
