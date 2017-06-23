@@ -20,8 +20,8 @@ data class ListenerOption(val id: String)
 class MessageDestination(val room: String)
 
 interface WithHandler<in E, in D> {
-    @JsName("onsend") val onSend: (MessageSent<E, D>) -> Unit
-    @JsName("onread") val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+    @JsName("onsend") val onSend: ((MessageSent<E, D>) -> Unit)?
+    @JsName("onread") val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
 }
 
 interface MessageSent<out E, out D> {

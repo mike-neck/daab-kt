@@ -14,8 +14,8 @@ class SendFileWithHandler(
         path: String,
         name: String?,
         type: String?,
-        override val onSend: (MessageSent<SendFile, SendFileContent>) -> Unit,
-        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+        override val onSend: ((MessageSent<SendFile, SendFileContent>) -> Unit)?,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
 ): SendFile(path, name, type), WithHandler<SendFile, SendFileContent>
 
 interface SendFileContent {
@@ -37,8 +37,8 @@ class SendFilesWithHandler(
         name: Array<String>?,
         type: Array<String>?,
         text: String?,
-        override val onSend: (MessageSent<SendFiles, SendFilesContent>) -> Unit,
-        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+        override val onSend: ((MessageSent<SendFiles, SendFilesContent>) -> Unit)?,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
 ): SendFiles(path, name, type, text), WithHandler<SendFiles, SendFilesContent>
 
 interface SendFilesContent {
@@ -57,6 +57,6 @@ class SendFileWithMessageAndHandler(
         text: String,
         type: String?,
         name: String?,
-        override val onSend: (MessageSent<SendFileWithMessage, SendFilesContent>) -> Unit,
-        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+        override val onSend: ((MessageSent<SendFileWithMessage, SendFilesContent>) -> Unit)?,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
 ): SendFileWithMessage(path, text, name, type), WithHandler<SendFileWithMessage, SendFilesContent>

@@ -14,6 +14,6 @@ class StampWithHandler(
         stampSet: Int,
         stampIndex: LongValue,
         text: String?,
-        override val onSend: (MessageSent<Stamp, Stamp>) -> Unit,
-        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+        override val onSend: ((MessageSent<Stamp, Stamp>) -> Unit)?,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
 ): Stamp(stampSet, stampIndex, text), WithHandler<Stamp, Stamp>

@@ -8,6 +8,6 @@ open class SendingMessage(val text: String)
 
 class SendingMessageWithHandler(
         text: String,
-        override val onSend: (MessageSent<SendingMessage, SendingMessage>) -> Unit,
-        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+        override val onSend: ((MessageSent<SendingMessage, SendingMessage>) -> Unit)?,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)?
 ): SendingMessage(text), WithHandler<SendingMessage, SendingMessage>
