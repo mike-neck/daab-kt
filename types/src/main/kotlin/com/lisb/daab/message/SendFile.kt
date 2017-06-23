@@ -34,12 +34,16 @@ open class SendFiles(
         val type: Array<String>?,
         val text: String?)
 
-// TODO it's inspecting now
 class SendFilesWithHandler(
         path: Array<String>,
         name: Array<String>?,
         type: Array<String>?,
         text: String?,
-        override val onSend: (MessageSent<SendFiles>) -> Unit,
+        override val onSend: (MessageSent<SendFiles, SendFilesContent>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
-): SendFiles(path, name, type, text), WithHandler<SendFiles>
+): SendFiles(path, name, type, text), WithHandler<SendFiles, SendFilesContent>
+
+interface SendFilesContent {
+    val files: Array<SendFileContent>
+    val text: String?
+}
