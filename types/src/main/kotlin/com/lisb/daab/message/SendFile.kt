@@ -8,17 +8,15 @@ import com.lisb.daab.WithHandler
 open class SendFile(
         val path: String,
         val name: String?,
-        val type: String?,
-        val contentSize: Int?)
+        val type: String?)
 
 class SendFileWithHandler(
         path: String,
         name: String?,
         type: String?,
-        contentSize: Int?,
         override val onSend: (MessageSent<SendFile, SendFileContent>) -> Unit,
         override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
-): SendFile(path, name, type, contentSize), WithHandler<SendFile, SendFileContent>
+): SendFile(path, name, type), WithHandler<SendFile, SendFileContent>
 
 interface SendFileContent {
     @JsName("file_id") val fileId: LongValue
@@ -47,3 +45,18 @@ interface SendFilesContent {
     val files: Array<SendFileContent>
     val text: String?
 }
+
+open class SendFileWithMessage(
+        val path: String,
+        val text: String,
+        val name: String?,
+        val type: String?)
+
+class SendFileWithMessageAndHandler(
+        path: String,
+        text: String,
+        type: String?,
+        name: String?,
+        override val onSend: (MessageSent<SendFileWithMessage, SendFilesContent>) -> Unit,
+        override val onRead: (Array<User>, Array<User>, Array<User>) -> Unit
+): SendFileWithMessage(path, text, name, type), WithHandler<SendFileWithMessage, SendFilesContent>

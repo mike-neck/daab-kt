@@ -53,5 +53,6 @@ external interface Response {
     fun send(closeTask: CloseTaskWithHandler): Unit
 
     fun send(sendFile: SendFileWithHandler): Unit
+    fun send(sendFileWithMessage: SendFileWithMessageAndHandler): Unit
     fun send(sendFiles: SendFilesWithHandler): Unit
 }
