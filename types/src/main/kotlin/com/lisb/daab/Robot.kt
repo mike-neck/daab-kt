@@ -18,6 +18,7 @@
 package com.lisb.daab
 
 import com.lisb.daab.message.*
+import com.lisb.daab.receive.Receive
 import kotlin.js.*
 
 external interface Robot {
@@ -28,6 +29,11 @@ external interface Robot {
 
     fun hear(regex: Regex, callback: (Response) -> Unit): Unit
     fun hear(regex: Regex, options: ListenerOption, callback: (Response) -> Unit): Unit
+
+    fun respond(regex: Regex, callback: (Response) -> Unit): Unit
+
+    fun respond(stamp: Receive.Stamp, action: ActionResponse<Stamp>): Unit
+    fun respond(question: Receive.YesNo, action: ActionResponse<ReceivedQuestion>): Unit
 }
 
 external interface Response {
@@ -46,6 +52,8 @@ external interface Response {
     fun send(question: QuestionWithHandler): Unit
     fun send(closeQuestion: CloseQuestionWithHandler): Unit
 
+    fun send(answerQuestion: AnswerQuestionWithHandler): Unit
+
     fun send(selectStamp: SelectStampWithHandler): Unit
     fun send(closeSelect: CloseSelectWithHandler): Unit
 
@@ -55,4 +63,8 @@ external interface Response {
     fun send(sendFile: SendFileWithHandler): Unit
     fun send(sendFileWithMessage: SendFileWithMessageAndHandler): Unit
     fun send(sendFiles: SendFilesWithHandler): Unit
+}
+
+external interface ActionResponse<out E>: Response {
+    val json: E
 }
