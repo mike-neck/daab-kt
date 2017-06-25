@@ -40,5 +40,8 @@ external object Receive {
     object File
 
     @JsName("files")
+    object FileWithMessage
+
+    @JsName("files")
     object Files
 }

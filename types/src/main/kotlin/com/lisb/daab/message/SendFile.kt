@@ -26,6 +26,26 @@ interface SendFileContent {
     @JsName("content_size") val size: Int
 }
 
+external interface ReceivedFile {
+    @JsName("file_id") val fileId: String
+    val name: String
+    @JsName("content_type") val contentType: String
+    @JsName("content_size") val contentSize: Int
+    val url: String
+    @JsName("thumbnail_url") val thumbnailUrl: String
+}
+
+class DownloadFile(
+        override val fileId: String,
+        override val name: String,
+        override val contentType: String,
+        override val contentSize: Int,
+        override val url: String,
+        override val thumbnailUrl: String
+): ReceivedFile
+
+// multiple files
+
 open class SendFiles(
         val path: Array<String>,
         val name: Array<String>? = null,
@@ -60,3 +80,12 @@ class SendFileWithMessageAndHandler(
         override val onSend: ((MessageSent<SendFileWithMessage, SendFilesContent>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
 ): SendFileWithMessage(path, text, name, type), WithHandler<SendFileWithMessage, SendFilesContent>
+
+external interface ReceivedFilesWithMessage {
+    val files: Array<ReceivedFile>
+    val text: String
+}
+
+external interface ReceivedFiles {
+    val files: Array<ReceivedFile>
+}

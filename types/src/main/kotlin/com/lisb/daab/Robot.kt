@@ -41,6 +41,10 @@ external interface Robot {
     fun respond(select: Receive.Select, action: (ActionResponse<ReceivedSelect>) -> Unit)
 
     fun respond(task: Receive.Task, action: (ActionResponse<ReceivedTask>) -> Unit): Unit
+
+    fun respond(file: Receive.File, action: (ActionResponse<ReceivedFile>) -> Unit): Unit
+    fun respond(files: Receive.FileWithMessage, action: (ActionResponse<ReceivedFilesWithMessage>) -> Unit): Unit
+    fun respond(files: Receive.Files, action: (ActionResponse<ReceivedFiles>) -> Unit): Unit
 }
 
 external interface Response {
@@ -74,6 +78,8 @@ external interface Response {
     fun send(sendFile: SendFileWithHandler): Unit
     fun send(sendFileWithMessage: SendFileWithMessageAndHandler): Unit
     fun send(sendFiles: SendFilesWithHandler): Unit
+
+    fun download(file: ReceivedFile, callback: (String) -> Unit): Unit
 }
 
 external interface ActionResponse<out E>: Response {
