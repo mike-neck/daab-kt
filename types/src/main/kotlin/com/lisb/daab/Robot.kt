@@ -35,6 +35,7 @@ external interface Robot {
     fun respond(stamp: Receive.Stamp, action: (ActionResponse<Stamp>) -> Unit): Unit
     // TODO Received Question does not have last_response property but when user closes a question last_response
     // TODO property will be added.
+    // TODO yesnot を登録していると、セレクトスタンプの終了も引っかかるのは、バグだと思われる
     fun respond(question: Receive.YesNo, action: (ActionResponse<ReceivedQuestion>) -> Unit): Unit
 
     fun respond(select: Receive.Select, action: (ActionResponse<ReceivedSelect>) -> Unit)
