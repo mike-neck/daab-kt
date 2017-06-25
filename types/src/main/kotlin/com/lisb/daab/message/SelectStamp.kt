@@ -32,16 +32,16 @@ external interface ReceivedSelect {
 
 open class AnswerForSelect(@JsName("in_reply_to") val inReplyTo: String, val response: Int)
 
-external interface AnswerSelect {
+external interface AnsweredSelect {
     @JsName("in_reply_to") val inReplyTo: LongValue
     val response: Int
 }
 
-external interface AnswerSelectResult : ReceivedSelect, AnswerSelect
+external interface AnswerSelectResult : ReceivedSelect, AnsweredSelect
 
 class AnswerSelectWithHandler(
         inReplyTo: String,
         response: Int,
-        override val onSend: ((MessageSent<AnswerSelect, AnswerSelectResult>) -> Unit)? = null,
+        override val onSend: ((MessageSent<AnsweredSelect, AnswerSelectResult>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): AnswerForSelect(inReplyTo, response), WithHandler<AnswerSelect, AnswerSelectResult>
+): AnswerForSelect(inReplyTo, response), WithHandler<AnsweredSelect, AnswerSelectResult>

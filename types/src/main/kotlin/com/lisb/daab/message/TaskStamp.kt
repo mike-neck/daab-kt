@@ -22,3 +22,24 @@ class CloseTaskWithHandler(
         override val onSend: ((MessageSent<CloseTaskWithInReplyTo, CloseTaskResult>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
 ): CloseTask(closeTask), WithHandler<CloseTaskWithInReplyTo, CloseTaskResult>
+
+external interface ReceivedTask {
+    val title: String
+    @JsName("closing_type") val closingType: Int
+}
+
+open class AnswerForTask(@JsName("in_reply_to") val inReplyTo: String, val done: Boolean = true)
+
+external interface AnsweredTask {
+    @JsName("in_reply_to") val inReplyTo: LongValue
+    val done: Boolean
+}
+
+external interface AnswerTaskResult: ReceivedTask, AnsweredTask
+
+class AnswerTaskWithHandler(
+        inReplyTo: String,
+        done: Boolean = true,
+        override val onSend: ((MessageSent<AnsweredTask, AnswerTaskResult>) -> Unit)? = null,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
+): AnswerForTask(inReplyTo, done), WithHandler<AnsweredTask, AnswerTaskResult>

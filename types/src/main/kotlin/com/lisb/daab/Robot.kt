@@ -39,6 +39,8 @@ external interface Robot {
     fun respond(question: Receive.YesNo, action: (ActionResponse<ReceivedQuestion>) -> Unit): Unit
 
     fun respond(select: Receive.Select, action: (ActionResponse<ReceivedSelect>) -> Unit)
+
+    fun respond(task: Receive.Task, action: (ActionResponse<ReceivedTask>) -> Unit): Unit
 }
 
 external interface Response {
@@ -66,6 +68,8 @@ external interface Response {
 
     fun send(taskStamp: TaskStampWithHandler): Unit
     fun send(closeTask: CloseTaskWithHandler): Unit
+
+    fun send(answerTask: AnswerTaskWithHandler): Unit
 
     fun send(sendFile: SendFileWithHandler): Unit
     fun send(sendFileWithMessage: SendFileWithMessageAndHandler): Unit
