@@ -36,6 +36,8 @@ external interface Robot {
     // TODO Received Question does not have last_response property but when user closes a question last_response
     // TODO property will be added.
     fun respond(question: Receive.YesNo, action: (ActionResponse<ReceivedQuestion>) -> Unit): Unit
+
+    fun respond(select: Receive.Select, action: (ActionResponse<ReceivedSelect>) -> Unit)
 }
 
 external interface Response {
@@ -58,6 +60,8 @@ external interface Response {
 
     fun send(selectStamp: SelectStampWithHandler): Unit
     fun send(closeSelect: CloseSelectWithHandler): Unit
+
+    fun send(answerSelect: AnswerSelectWithHandler): Unit
 
     fun send(taskStamp: TaskStampWithHandler): Unit
     fun send(closeTask: CloseTaskWithHandler): Unit

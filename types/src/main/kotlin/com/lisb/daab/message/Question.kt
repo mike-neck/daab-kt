@@ -28,7 +28,7 @@ external interface ReceivedQuestion {
     @JsName("closing_type")val closingType: Int
 }
 
-open class AnswerQuestion(@JsName("in_reply_to") val inReplyTo: String, val response: Boolean)
+open class AnswerForQuestion(@JsName("in_reply_to") val inReplyTo: String, val response: Boolean)
 
 external interface AnsweredQuestion {
     @JsName("in_reply_to") val inReplyTo: LongValue
@@ -42,4 +42,4 @@ class AnswerQuestionWithHandler(
         response: Boolean,
         override val onSend: ((MessageSent<AnsweredQuestion, AnswerQuestionResult>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): AnswerQuestion(inReplyTo, response), WithHandler<AnsweredQuestion, AnswerQuestionResult>
+): AnswerForQuestion(inReplyTo, response), WithHandler<AnsweredQuestion, AnswerQuestionResult>

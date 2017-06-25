@@ -23,3 +23,25 @@ class CloseSelectWithHandler(
         override val onSend: ((MessageSent<CloseSelectWithInReplyTo, CloseQuestionResult>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
 ): CloseSelect(closeSelect), WithHandler<CloseSelectWithInReplyTo, CloseQuestionResult>
+
+external interface ReceivedSelect {
+    val question: String
+    val options: Array<String>
+    @JsName("closing_type") val closingType: Int
+}
+
+open class AnswerForSelect(@JsName("in_reply_to") val inReplyTo: String, val response: Int)
+
+external interface AnswerSelect {
+    @JsName("in_reply_to") val inReplyTo: LongValue
+    val response: Int
+}
+
+external interface AnswerSelectResult : ReceivedSelect, AnswerSelect
+
+class AnswerSelectWithHandler(
+        inReplyTo: String,
+        response: Int,
+        override val onSend: ((MessageSent<AnswerSelect, AnswerSelectResult>) -> Unit)? = null,
+        override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
+): AnswerForSelect(inReplyTo, response), WithHandler<AnswerSelect, AnswerSelectResult>
