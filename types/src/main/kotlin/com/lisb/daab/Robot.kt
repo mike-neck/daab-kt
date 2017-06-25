@@ -32,10 +32,10 @@ external interface Robot {
 
     fun respond(regex: Regex, callback: (Response) -> Unit): Unit
 
-    fun respond(stamp: Receive.Stamp, action: ActionResponse<Stamp>): Unit
+    fun respond(stamp: Receive.Stamp, action: (ActionResponse<Stamp>) -> Unit): Unit
     // TODO Received Question does not have last_response property but when user closes a question last_response
     // TODO property will be added.
-    fun respond(question: Receive.YesNo, action: ActionResponse<ReceivedQuestion>): Unit
+    fun respond(question: Receive.YesNo, action: (ActionResponse<ReceivedQuestion>) -> Unit): Unit
 }
 
 external interface Response {
