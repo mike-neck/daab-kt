@@ -44,4 +44,7 @@ external object Receive {
 
     @JsName("files")
     object Files
+
+    @JsName("map")
+    object Map
 }
