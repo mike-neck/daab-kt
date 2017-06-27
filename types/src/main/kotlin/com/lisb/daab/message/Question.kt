@@ -4,12 +4,20 @@ import com.lisb.daab.*
 
 open class Question(val question: String, val listing: Boolean? = null)
 
+external interface AfterQuestionHandler: OnReadHandler {
+    @JsName("onsend") val onSend: ((QuestionSent) -> Unit)?
+}
+
+external interface QuestionSent: MessageSent<Question, Question> {
+    fun answer(questionAnswers: (Array<User>, Array<User>) -> Unit): Unit
+}
+
 class QuestionAfterMessageHandler(
         question: String,
         listing: Boolean? = null,
-        override val onSend: ((MessageSent<Question, Question>) -> Unit)? = null,
+        override val onSend: ((QuestionSent) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): Question(question, listing), AfterMessageHandler<Question, Question>
+): Question(question, listing), AfterQuestionHandler
 
 open class CloseQuestion(@JsName("close_yesno") val closeYesNo: String)
 
