@@ -4,12 +4,12 @@ import com.lisb.daab.*
 
 open class TaskStamp(val title: String, @JsName("closing_type") val closingType: Int)
 
-class TaskStampWithHandler(
+class TaskStampAfterMessageHandler(
         title: String,
         closingType: Int,
         override val onSend: ((MessageSent<TaskStamp, TaskStamp>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): TaskStamp(title, closingType), WithHandler<TaskStamp, TaskStamp>
+): TaskStamp(title, closingType), AfterMessageHandler<TaskStamp, TaskStamp>
 
 open class CloseTask(@JsName("close_task") val closeTask: String)
 
@@ -17,11 +17,11 @@ abstract class CloseTaskWithInReplyTo(closeTask: String): CloseTask(closeTask) {
     @JsName("in_reply_to") abstract val inReplyTo: LongValue
 }
 
-class CloseTaskWithHandler(
+class CloseTaskAfterMessageHandler(
         closeTask: String,
         override val onSend: ((MessageSent<CloseTaskWithInReplyTo, CloseTaskResult>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): CloseTask(closeTask), WithHandler<CloseTaskWithInReplyTo, CloseTaskResult>
+): CloseTask(closeTask), AfterMessageHandler<CloseTaskWithInReplyTo, CloseTaskResult>
 
 external interface ReceivedTask {
     val title: String
@@ -37,9 +37,9 @@ external interface AnsweredTask {
 
 external interface AnswerTaskResult: ReceivedTask, AnsweredTask
 
-class AnswerTaskWithHandler(
+class AnswerTaskAfterMessageHandler(
         inReplyTo: String,
         done: Boolean = true,
         override val onSend: ((MessageSent<AnsweredTask, AnswerTaskResult>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): AnswerForTask(inReplyTo, done), WithHandler<AnsweredTask, AnswerTaskResult>
+): AnswerForTask(inReplyTo, done), AfterMessageHandler<AnsweredTask, AnswerTaskResult>

@@ -58,26 +58,26 @@ external interface Response {
     fun send(vararg messages: SendingMessage): Unit
     fun send(destination: MessageDestination, vararg messages: SendingMessage): Unit
 
-    fun send(stamp: StampWithHandler): Unit
+    fun send(stamp: StampAfterMessageHandler): Unit
 
-    fun send(question: QuestionWithHandler): Unit
-    fun send(closeQuestion: CloseQuestionWithHandler): Unit
+    fun send(question: QuestionAfterMessageHandler): Unit
+    fun send(closeQuestion: CloseQuestionAfterMessageHandler): Unit
 
-    fun send(answerQuestion: AnswerQuestionWithHandler): Unit
+    fun send(answerQuestion: AnswerQuestionAfterMessageHandler): Unit
 
-    fun send(selectStamp: SelectStampWithHandler): Unit
-    fun send(closeSelect: CloseSelectWithHandler): Unit
+    fun send(selectStamp: SelectStampAfterMessageHandler): Unit
+    fun send(closeSelect: CloseSelectAfterMessageHandler): Unit
 
-    fun send(answerSelect: AnswerSelectWithHandler): Unit
+    fun send(answerSelect: AnswerSelectAfterMessageHandler): Unit
 
-    fun send(taskStamp: TaskStampWithHandler): Unit
-    fun send(closeTask: CloseTaskWithHandler): Unit
+    fun send(taskStamp: TaskStampAfterMessageHandler): Unit
+    fun send(closeTask: CloseTaskAfterMessageHandler): Unit
 
-    fun send(answerTask: AnswerTaskWithHandler): Unit
+    fun send(answerTask: AnswerTaskAfterMessageHandler): Unit
 
-    fun send(sendFile: SendFileWithHandler): Unit
-    fun send(sendFileWithMessage: SendFileWithMessageAndHandler): Unit
-    fun send(sendFiles: SendFilesWithHandler): Unit
+    fun send(sendFile: SendFileAfterMessageHandler): Unit
+    fun send(sendFileWithMessage: SendFileAfterMessageMessageAndHandler): Unit
+    fun send(sendFiles: SendFilesAfterMessageHandler): Unit
 
     fun download(file: ReceivedFile, callback: (String) -> Unit): Unit
 }

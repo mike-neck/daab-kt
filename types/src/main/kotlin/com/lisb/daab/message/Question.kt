@@ -4,12 +4,12 @@ import com.lisb.daab.*
 
 open class Question(val question: String, val listing: Boolean? = null)
 
-class QuestionWithHandler(
+class QuestionAfterMessageHandler(
         question: String,
         listing: Boolean? = null,
         override val onSend: ((MessageSent<Question, Question>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): Question(question, listing), WithHandler<Question, Question>
+): Question(question, listing), AfterMessageHandler<Question, Question>
 
 open class CloseQuestion(@JsName("close_yesno") val closeYesNo: String)
 
@@ -17,11 +17,11 @@ abstract class CloseQuestionWithInReplyTo(closeYesNo: String): CloseQuestion(clo
     @JsName("in_reply_to") abstract val inReplyTo: LongValue
 }
 
-class CloseQuestionWithHandler(
+class CloseQuestionAfterMessageHandler(
         closeYesNo: String,
         override val onSend: ((MessageSent<CloseQuestionWithInReplyTo, CloseQuestionResult>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): CloseQuestion(closeYesNo), WithHandler<CloseQuestionWithInReplyTo, CloseQuestionResult>
+): CloseQuestion(closeYesNo), AfterMessageHandler<CloseQuestionWithInReplyTo, CloseQuestionResult>
 
 external interface ReceivedQuestion {
     val question: String
@@ -37,9 +37,9 @@ external interface AnsweredQuestion {
 
 external interface AnswerQuestionResult : ReceivedQuestion, AnsweredQuestion
 
-class AnswerQuestionWithHandler(
+class AnswerQuestionAfterMessageHandler(
         inReplyTo: String,
         response: Boolean,
         override val onSend: ((MessageSent<AnsweredQuestion, AnswerQuestionResult>) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): AnswerForQuestion(inReplyTo, response), WithHandler<AnsweredQuestion, AnswerQuestionResult>
+): AnswerForQuestion(inReplyTo, response), AfterMessageHandler<AnsweredQuestion, AnswerQuestionResult>
