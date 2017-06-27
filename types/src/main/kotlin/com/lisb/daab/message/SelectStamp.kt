@@ -4,13 +4,21 @@ import com.lisb.daab.*
 
 open class SelectStamp(val question: String, val options: Array<String>, val listing: Boolean? = null)
 
+external interface AfterSelectHandler: OnReadHandler {
+    @JsName("onsend") val onSend: ((SelectSent) -> Unit)?
+}
+
+external interface SelectSent: MessageSent<SelectStamp, SelectStamp> {
+    fun answer(selectAnswers: (Array<Array<User>>) -> Unit): Unit
+}
+
 class SelectStampAfterMessageHandler(
         question: String,
         options: Array<String>,
         listing: Boolean? = null,
-        override val onSend: ((MessageSent<SelectStamp, SelectStamp>) -> Unit)? = null,
+        override val onSend: ((SelectSent) -> Unit)? = null,
         override val onRead: ((Array<User>, Array<User>, Array<User>) -> Unit)? = null
-): SelectStamp(question, options, listing), AfterMessageHandler<SelectStamp, SelectStamp>
+): SelectStamp(question, options, listing), AfterSelectHandler
 
 open class CloseSelect(@JsName("close_select") val closeSelect: String)
 
