@@ -34,7 +34,7 @@ external open class Message(user: User, done: Boolean): MessageProperty {
 
 external open class TextMessage: Message {
     val text: String
-    val id: String
+    val id: String?
     val rooms: Map<String, Room>
     val roomType: Int
     val roomTopic: String?
