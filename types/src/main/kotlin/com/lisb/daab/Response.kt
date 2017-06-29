@@ -28,8 +28,11 @@ external interface Response<out M: Message> {
 
     fun send(vararg messages: String): Unit
     fun send(destination: MessageDestination, vararg messages: String): Unit
-    fun send(vararg messages: SendingMessage): Unit
-    fun send(destination: MessageDestination, vararg messages: SendingMessage): Unit
+
+    fun send(vararg messages: TextAfterMessageHandler): Unit
+    fun send(destination: MessageDestination, vararg messages: TextAfterMessageHandler): Unit
+
+    fun send(text: TextAfterMessageHandler): Unit
 
     fun send(stamp: StampAfterMessageHandler): Unit
 
