@@ -46,5 +46,6 @@ external open class TextMessage: Message {
 
 external class EnterMessage: Message
 external class LeaveMessage: Message
+external class JoinMessage: Message
 external class TopicMessage: TextMessage
 external class CatchAllMessage: Message

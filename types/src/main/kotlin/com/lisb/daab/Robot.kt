@@ -35,12 +35,17 @@ external interface Robot {
     /**
      * detects a entrance of a new user into a room, and calls a given callback.
      */
-    fun enter(callback: (Response<EnterMessage>) -> Unit)
+    fun enter(callback: (Response<EnterMessage>) -> Unit): Unit
 
     /**
      * detects a user leaving from a room, and calls a given callback.
      */
-    fun leave(callback: (Response<LeaveMessage>) -> Unit)
+    fun leave(callback: (Response<LeaveMessage>) -> Unit): Unit
+
+    /**
+     * calls a given callback on being invited to a room.
+     */
+    fun join(callback: (Response<JoinMessage>) -> Unit): Unit
 
     // hear : reaction to group talk.
 
