@@ -29,8 +29,8 @@ external interface Response<out M: Message> {
     fun send(vararg messages: String): Unit
     fun send(destination: MessageDestination, vararg messages: String): Unit
 
-    fun send(vararg messages: TextAfterMessageHandler): Unit
-    fun send(destination: MessageDestination, vararg messages: TextAfterMessageHandler): Unit
+    fun send(vararg messages: AfterMessageHandler<Any, Any>): Unit
+    fun send(destination: MessageDestination, vararg messages: AfterMessageHandler<Any, Any>): Unit
 
     fun send(text: TextAfterMessageHandler): Unit
 
