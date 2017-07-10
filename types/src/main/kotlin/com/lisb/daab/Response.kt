@@ -56,6 +56,16 @@ external interface Response<out M: Message> {
     fun send(sendFiles: SendFilesAfterMessageHandler): Unit
 
     fun download(file: ReceivedFile, callback: (String) -> Unit): Unit
+
+    /**
+     * leaves from a room
+     */
+    fun leave(): Unit
+
+    /**
+     * remove user from a room.
+     */
+    fun leave(user: User): Unit
 }
 
 external interface ActionResponse<out E>: Response<TextMessage> {
