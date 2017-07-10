@@ -93,6 +93,7 @@ project(':types') {
     compileKotlin2Js {
         kotlinOptions.outputFile = "build/js/daab-kt.js"
         kotlinOptions.sourceMap = true
+        kotlinOptions.moduleKind = "commonjs"
     }
 
     tasks.withType(Jar) {
