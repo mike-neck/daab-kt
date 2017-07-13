@@ -108,7 +108,9 @@ object Configurations {
             project.tasks.create(Daab.packageJson).dependsOn(Daab.replacePackageJson)
 
     fun configureGenerateAppJsTask(project: Project, daab: Daab): Task =
-            project.tasks.create<GenerateAppJsTask>(Daab.generateAppJs) { it.daab = daab }
+            project.tasks.create<GenerateAppJsTask>(Daab.generateAppJs)
+                    .also{ it.daab = daab }
+                    .also { it.group = Daab.group }
 
     fun configureForeverIgnoreTask(project: Project, daab: Daab): Task =
             project.tasks.create<ForeverIgnoreTask>(Daab.foreverIgnore)
