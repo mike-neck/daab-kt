@@ -62,7 +62,7 @@ open class NpmKotlinVersion: AbstractExecTask<NpmKotlinVersion>(NpmKotlinVersion
             else outputStream.toString("UTF-8").lineSequence()
             .find { it.contains("latest:") }
             ?.substringAfter("latest:")
-            ?.replace("},", "")
+            ?.substringBefore(',')
             ?.replace("'", "")
             ?.trim() ?: "1.1.0"
 }
