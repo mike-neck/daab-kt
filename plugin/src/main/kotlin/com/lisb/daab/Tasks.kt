@@ -50,7 +50,7 @@ open class GenerateAppJsTask: DefaultTask() {
     open fun writeJsFile(): Unit = """
 const daab = require("./lib/${daab.appName}");
 
-module.exports = daab.${daab.mainPackage}.${daab.appName};
+module.exports = daab.${if(daab.mainPackage.isEmpty()) "" else "${daab.mainPackage}."}${daab.appName};
 """.let { jsFile.writeText(it) }
 }
 

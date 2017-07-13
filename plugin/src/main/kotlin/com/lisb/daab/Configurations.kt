@@ -53,7 +53,7 @@ object Configurations {
 
     fun configureKotlinCompileOption(project: Project, daab: Daab): Unit = project.afterEvaluate {
         val options = it.tasks.getByName(Daab.compileKotlin2Js).k2Js().kotlinOptions
-        options.outputFile = "${project.projectDir}/${daab.daabAppDir}/lib/${daab.appName}.js"
+        options.outputFile = "${project.projectDir}/${daab.daabAppDir}/scripts/lib/${daab.appName}.js"
         options.moduleKind = "commonjs"
         options.sourceMap = true
     }
