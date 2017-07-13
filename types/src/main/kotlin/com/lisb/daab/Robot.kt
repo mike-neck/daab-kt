@@ -24,8 +24,8 @@ import kotlin.js.*
 external interface Robot {
     val adapterName: String
 
-    fun listen(regex: Regex, callback: (Response<TextMessage>) -> Unit): Unit
-    fun listen(regex: Regex, options: ListenerOption, callback: (Response<TextMessage>) -> Unit): Unit
+    fun listen(regex: RegExp, callback: (Response<TextMessage>) -> Unit): Unit
+    fun listen(regex: RegExp, options: ListenerOption, callback: (Response<TextMessage>) -> Unit): Unit
 
     /**
      * detects a change of a topic of a room, and calls a given callback.
@@ -49,8 +49,8 @@ external interface Robot {
 
     // hear : reaction to group talk.
 
-    fun hear(regex: Regex, callback: (Response<TextMessage>) -> Unit): Unit
-    fun hear(regex: Regex, options: ListenerOption, callback: (Response<TextMessage>) -> Unit): Unit
+    fun hear(regex: RegExp, callback: (Response<TextMessage>) -> Unit): Unit
+    fun hear(regex: RegExp, options: ListenerOption, callback: (Response<TextMessage>) -> Unit): Unit
 
     fun hear(stamp: Receive.Stamp, action: (ActionResponse<Stamp>) -> Unit): Unit
 
@@ -66,7 +66,7 @@ external interface Robot {
 
     // respond : reaction to pair talk.
 
-    fun respond(regex: Regex, callback: (Response<TextMessage>) -> Unit): Unit
+    fun respond(regex: RegExp, callback: (Response<TextMessage>) -> Unit): Unit
 
     fun respond(stamp: Receive.Stamp, action: (ActionResponse<Stamp>) -> Unit): Unit
     // TODO Received Question does not have last_response property but when user closes a question last_response
