@@ -24,8 +24,8 @@ import kotlin.js.*
 external interface Robot {
     val adapterName: String
 
-    fun listen(regex: RegExp, callback: (Response<TextMessage>) -> Unit): Unit
-    fun listen(regex: RegExp, options: ListenerOption, callback: (Response<TextMessage>) -> Unit): Unit
+    fun listen(condition: (Message) -> Boolean, callback: (Response<TextMessage>) -> Unit): Unit
+    fun listen(condition: (Message) -> Boolean, options: ListenerOption, callback: (Response<TextMessage>) -> Unit): Unit
 
     /**
      * detects a change of a topic of a room, and calls a given callback.
