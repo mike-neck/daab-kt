@@ -52,7 +52,6 @@ open class Daab(
         override val prepareDaabDirectory: String = "prepareDaabDirectory"
         override val foreverIgnore: String = "foreverIgnore"
         override val generateAppJs: String = "generateAppJs"
-        override val npmKotlinVersion: String = "npmKotlinVersion"
         override val writePackageJson: String = "writePackageJson"
         override val replacePackageJson: String = "replacePackageJson"
         override val packageJson: String = "packageJson"
@@ -85,7 +84,6 @@ interface TaskNamer {
     val prepareDaabDirectory: String
     val foreverIgnore: String
     val generateAppJs: String
-    val npmKotlinVersion: String
     val writePackageJson: String
     val replacePackageJson: String
     val packageJson: String
