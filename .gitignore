@@ -8,7 +8,6 @@
 ### Gradle template
 .gradle
 /build/
-!gradle-wrapper.jar
 
 ### Java template
 *.class
@@ -19,6 +18,8 @@
 *.zip
 *.tar.gz
 *.rar
+
+!gradle/wrapper/gradle-wrapper.jar
 
 ### macOS template
 *.DS_Store
