@@ -14,7 +14,7 @@ version=daabPluginVersion
 group=lisbCorp
 
 ext {
-    localDevelopment = project.file('install-local.gradle') != null
+    localDevelopment = project.file('install-local.gradle').exists()
 }
 
 subprojects {
