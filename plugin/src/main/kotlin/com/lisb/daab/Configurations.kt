@@ -83,18 +83,10 @@ object Configurations {
 
     fun appendPath(exec: File): String = "${System.getenv("PATH")}:${exec.absoluteFile.parent}"
 
-    fun configureNpmKotlinVersionTask(project: Project, daab: Daab): Task =
-            project.tasks.create<NpmKotlinVersion>(Daab.npmKotlinVersion)
-                    .also { it.executable = daab.executable.replace("daab", "npm") }
-                    .also { it.args("view", "kotlin") }
-                    .also { it.environment("PATH", appendPath(project.file(daab.executable))) }
-                    .also { it.standardOutput = it.outputStream }
-                    .also { it.dependsOn(Daab.daabInit) }
-
     fun configureWritePackageJsonTask(project: Project, daab: Daab): Task =
             project.tasks.create<WritePackageJson>(Daab.writePackageJson)
                     .also { it.daab = daab }
-                    .also { it.dependsOn(Daab.npmKotlinVersion) }
+                    .also { it.dependsOn(Daab.daabInit) }
 
     fun configureReplacePackageJsonTask(project: Project, daab: Daab): Task =
             project.tasks.create(Daab.replacePackageJson).doLast {

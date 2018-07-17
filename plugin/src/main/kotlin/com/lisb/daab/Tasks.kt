@@ -54,19 +54,6 @@ module.exports = daab.${if(daab.mainPackage.isEmpty()) "" else "${daab.mainPacka
 """.let { jsFile.writeText(it) }
 }
 
-open class NpmKotlinVersion: AbstractExecTask<NpmKotlinVersion>(NpmKotlinVersion::class.java) {
-
-    open val outputStream: ByteArrayOutputStream = ByteArrayOutputStream(65536)
-
-    open fun getOutputAsString(): String = if (this.state.skipped) throw IllegalStateException("the task did nothing.")
-            else outputStream.toString("UTF-8").lineSequence()
-            .find { it.contains("latest:") }
-            ?.substringAfter("latest:")
-            ?.substringBefore(',')
-            ?.replace("'", "")
-            ?.trim() ?: "1.1.0"
-}
-
 open class WritePackageJson: DefaultTask() {
 
     lateinit var daab: Daab
@@ -77,20 +64,15 @@ open class WritePackageJson: DefaultTask() {
     @get:InputFile
     open val packageJson: File get() = project.file(daab.packageJson(project))
 
-    open val npmKotlinVersionTask: NpmKotlinVersion
-        get() = project.tasks.getByName(Daab.npmKotlinVersion).let {
-            it as? NpmKotlinVersion ?:
-                    throw IllegalStateException(
-                            "npmKotlinVersion task is defined as [${NpmKotlinVersion::class.qualifiedName}]")
-        }
-
     open fun appendNextLine(current: String): String =
             if (current.contains("\"dependencies\": {"))
                 """
-    "kotlin": "^${npmKotlinVersionTask.getOutputAsString()}",
+    "kotlin": "^${project.properties["kotlinVersion"]}",
 """
             else
-                "\n"
+                "\n".also { 
+                    println("${project.properties["kotlinVersion"]}")
+                }
 
     @TaskAction
     open fun appendJsonFile(): Unit = StringBuilder()

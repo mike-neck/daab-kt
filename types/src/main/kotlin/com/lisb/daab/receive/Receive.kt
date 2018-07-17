@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 @file:JsQualifier("com.lisb.daab")
-@file:JsModule("daab-kt-js-binding")
+@file:JsModule("daab-kt-js-binding.js")
 
 package com.lisb.daab.receive
 
