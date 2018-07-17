@@ -42,7 +42,81 @@ To customize this plugin, edit these items.
 [options="header"]
 |================================
 |Property|Value|Default|Nullable
-|`executable`|Path to `daab` command|`/usr/local/bin/daab`|No
-|`mainPackage`|Package of the application|`""`(empty string)|No
-|`daabAppDir`|The application directory relative to the project|`daab`|No
+
+|`executable`
+|Path to `daab` command
+|`/usr/local/bin/daab`
+|No
+
+|`mainPackage`
+|Package of the application. The value should be a valid package name.
+|`""`(empty string)
+|No
+
+|`daabAppDir`
+|The application directory relative to the project.
+|`daab`
+|No
+
+|`appName`
+|The object name to be exported in kotlin file.
+|`app`
+|No
+
 |================================
+
+== Project Structure
+
+A project should have the normal gradle/maven kotlin project structure.
+
+[tree, txt]
+----
+project-root
+├── build.gradle
+└── src
+    └── main
+        └── kotlin
+            └── com
+                └── example
+----
+
+Given a configuration in `build.gradle` file...
+
+[build.gradle, groovy]
+----
+daab {
+  daabAppDir = 'my-app'
+  mainPackage = 'com.example'
+  appName = 'myApplication'
+}
+----
+
+If you give a value to `mainPackage`, then the main object to be exported should be written under
+the package, because Kotlin2Js compiler cannot detect that it is the main object.
+
+The `appName` will be used as a file name Kotlin compiler will create, and will be loaded
+as a package object by a js file which gradle daab plugin will generate. So note that
+the main package object should be named as the same name as the `appName` value.
+
+Given tha main kotlin script is written like an example below, `app.js` (daab plugin's generated script)
+will load a main entry point `myApplication` with the same name. If you give `appName` with another,
+a daab application won't run.
+
+[App.kt, kotlin]
+----
+package com.example
+
+// will run
+val myApplication: (Robot) -> Unit = { robot ->
+  robot.hear(RegExp("PING", "i")) { res ->
+    res.send("pong")
+  }
+}
+
+// won't run
+val application: (Robot) -> Unit = { robot ->
+  roobot.head(RegExp("FOO", "i")) {
+    println(it.message.text)
+  }
+}
+----
