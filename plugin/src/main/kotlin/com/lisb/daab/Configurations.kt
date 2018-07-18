@@ -81,6 +81,15 @@ object Configurations {
             .also { it.workingDir(daab.daabAppDir) }
             .also { it.finalizedBy(Daab.packageJson) }
 
+    fun configureDaabRunTask(project: Project, daab: Daab): Task = project.tasks.create<DaabTask>(Daab.daabRun)
+            .also { it.description = "runs daab after compiling Kotlin bot" }
+            .also { it.group = Daab.group }
+            .also { it.dependsOn(Daab.compileKotlin2Js) }
+            .also { it.daab = daab }
+            .also { it.args("run") }
+            .also { it.environment("PATH", appendPath(project.file(daab.executable))) }
+            .also { it.workingDir(daab.daabAppDir) }
+
     fun appendPath(exec: File): String = "${System.getenv("PATH")}:${exec.absoluteFile.parent}"
 
     fun configureWritePackageJsonTask(project: Project, daab: Daab): Task =
