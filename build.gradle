@@ -115,3 +115,11 @@ project(':types') {
         archives tasks.sourcesJar, tasks.javadocJar
     }
 }
+
+if (!file('install-local.gradle').exists()) {
+    task generateInstallLocalGradle(group: 'dev-init') {
+        doLast {
+            file('install-local.gradle').write('apply plugin: "maven"', 'UTF-8')
+        }
+    }
+}

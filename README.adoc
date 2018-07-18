@@ -120,3 +120,21 @@ val application: (Robot) -> Unit = { robot ->
   }
 }
 ----
+
+== For Development of the plugin project and the types project
+
+Create `install-local.gradle` file at the root directory of this project
+to install jar files into local maven directory.
+
+[intall-local.gradle, groovy]
+----
+apply plugin: 'maven'
+----
+
+To create `install-local.gradle` file, use `generateInstallLocalGradle` task at the project root directory.
+
+[bash]
+----
+$ ./gradlew generateInstallLocalGradle
+----
+
