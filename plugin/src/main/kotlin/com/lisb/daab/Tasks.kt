@@ -70,9 +70,7 @@ open class WritePackageJson: DefaultTask() {
     "kotlin": "^${project.properties["kotlinVersion"]}",
 """
             else
-                "\n".also { 
-                    println("${project.properties["kotlinVersion"]}")
-                }
+                "\n"
 
     @TaskAction
     open fun appendJsonFile(): Unit = StringBuilder()
