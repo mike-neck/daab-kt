@@ -71,11 +71,11 @@ object Configurations {
                 it.outputs.upToDateWhen { project.file(daab.daabAppDir).exists() }
             }
 
-    fun configureDaabInitTask(project: Project, daab: Daab): Task = project.tasks.create<Exec>(Daab.daabInit)
+    fun configureDaabInitTask(project: Project, daab: Daab): Task = project.tasks.create<DaabTask>(Daab.daabInit)
             .also { it.description = "init daab project directory" }
             .also { it.group = Daab.group }
             .also { it.dependsOn(Daab.prepareDaabDirectory) }
-            .also { it.executable = daab.executable }
+            .also { it.daab = daab }
             .also { it.args("init") }
             .also { it.environment("PATH", appendPath(project.file(daab.executable))) }
             .also { it.workingDir(daab.daabAppDir) }
